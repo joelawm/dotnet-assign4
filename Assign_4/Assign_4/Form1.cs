@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Assign_3
 {
@@ -20,14 +21,21 @@ namespace Assign_3
         //communites in use
         public static Community DekalbCommunity;
         public static Community SycamoreCommunity;
+        public static float Radius = 3;
+        public static float Rec_Hight = 7;
+        public static float Rec_Width = 7;
+        public static float Map_Hight = 500;
+        public static float Map_Width = 250;
+        public static float Boarder = 250;
 
         public Form1()
         {
             //intilaize everything
             InitializeComponent();
             InitializeCommunity();
+            //Map.ImageLocation = "..\\..\\icons8-home-128.png";
         }
-
+        #region start
         private void InitializeCommunity()
         {
             ActiveDekalb activeDekalb = new ActiveDekalb();
@@ -37,7 +45,7 @@ namespace Assign_3
             SycamoreCommunity = activeSycamore.ActiveSycamore_Files();
 
         }
-        
+
         // Cleck forsale dropdown and show all the properties
         private void ForSaleCombobox_DropDown(object sender, EventArgs e)
         {
@@ -126,26 +134,26 @@ namespace Assign_3
 
             //query
             var list = from res in comm.Props
-                        where (res is House) || (res is Apartment)
-                        where (res.StreetAddr == stAddr[0])
-                        from n in communities
-                        from pro in n.Props
-                        where (pro is Business)
-                        where pro.ForSale.Split(':')[0] == "T"
-                        let x = Math.Pow((int)(res.X - pro.X), 2)
-                        let y = Math.Pow((int)(res.Y - pro.Y), 2)
-                        where (x + y) < Math.Pow(distance, 2)
-                        from n1 in n.Residents
-                        where n1.Id == pro.OwnerId
-                        orderby (x + y) descending
-                        select new CommunityInfo()
-                        {
-                            id = pro.Id,
-                            property = pro,
-                            FullName = n1.FullName,
-                            distance = (int)Math.Sqrt(x + y),
-                            type = (pro is House) ? 0 : 1
-                        };
+                       where (res is House) || (res is Apartment)
+                       where (res.StreetAddr == stAddr[0])
+                       from n in communities
+                       from pro in n.Props
+                       where (pro is Business)
+                       where pro.ForSale.Split(':')[0] == "T"
+                       let x = Math.Pow((int)(res.X - pro.X), 2)
+                       let y = Math.Pow((int)(res.Y - pro.Y), 2)
+                       where (x + y) < Math.Pow(distance, 2)
+                       from n1 in n.Residents
+                       where n1.Id == pro.OwnerId
+                       orderby (x + y) descending
+                       select new CommunityInfo()
+                       {
+                           id = pro.Id,
+                           property = pro,
+                           FullName = n1.FullName,
+                           distance = (int)Math.Sqrt(x + y),
+                           type = (pro is House) ? 0 : 1
+                       };
             //output
             PrintNearbyBusiness(list);
 
@@ -230,7 +238,7 @@ namespace Assign_3
             int results = 0;
 
             //create both of the list
-            List<residentialInfo>  DList = ResidentialPara(DekalbCommunity);
+            List<residentialInfo> DList = ResidentialPara(DekalbCommunity);
             List<residentialInfo> SList = ResidentialPara(SycamoreCommunity);
 
             //combine the 2 lists
@@ -238,7 +246,7 @@ namespace Assign_3
 
             //reorder the list
             //DList = DList.OrderBy(i => i.ForSale).ToList();
-             
+
             //go throught the list and print if needed
             foreach (var pro in DList)
             {
@@ -248,7 +256,7 @@ namespace Assign_3
                 //checking data based on the list
                 if (HouseCheckBox.Checked == true && pro.proType == true && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value)
                 {
-                    if(GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == false && pro.Garage == true && pro.AttachedGarage == false)
+                    if (GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == false && pro.Garage == true && pro.AttachedGarage == false)
                     {
                         QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} \r\nOwner: {4}, {5} | {6}, {7} baths, {8} sq.ft. \r\n {9} : {10}     {11:C0}\r\n\r\n",
                            pro.StreetAddr, pro.City, pro.State, pro.Zip, splitted[1], splitted[0].Trim(new char[] { ',' }), (pro.Bed == 1) ? " bed " : pro.Bed + " beds ", pro.Bath, pro.Sqft,
@@ -257,7 +265,7 @@ namespace Assign_3
                            ));
                         results += 1;
                     }
-                    else if(GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == true && pro.Garage == true && pro.AttachedGarage == true)
+                    else if (GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == true && pro.Garage == true && pro.AttachedGarage == true)
                     {
                         QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} \r\nOwner: {4}, {5} | {6}, {7} baths, {8} sq.ft. \r\n {9} : {10}     {11:C0}\r\n\r\n",
                            pro.StreetAddr, pro.City, pro.State, pro.Zip, splitted[1], splitted[0].Trim(new char[] { ',' }), (pro.Bed == 1) ? " bed " : pro.Bed + " beds ", pro.Bath, pro.Sqft,
@@ -398,7 +406,7 @@ namespace Assign_3
                 else
                     break;
 
-            
+
             SortedList<int, CommunityInfo> propertyList = new SortedList<int, CommunityInfo>();
 
             //make communites
@@ -413,31 +421,31 @@ namespace Assign_3
                 comm = SycamoreCommunity;
             //query
             var list = from school in comm.Props
-                        where (school is School) && ((school as School).Name == schoolName)
-                        from n in communities
-                        from pro in n.Props
-                        where (pro is Apartment) || (pro is House)
-                        where pro.ForSale.Split(':')[0] == "T"
-                        let x = Math.Pow((int)(school.X - pro.X), 2)
-                        let y = Math.Pow((int)(school.Y - pro.Y), 2)
-                        where (x + y) < Math.Pow(distance, 2)
-                        from n1 in n.Residents
-                        where n1.Id == pro.OwnerId
-                        orderby (x + y) descending
-                        select new CommunityInfo()
-                        {
-                            FullName = n1.FullName,
-                            id = pro.OwnerId,
-                            property = pro,
-                            distance = (int)Math.Sqrt(x + y),
-                            type = (pro is House) ? 0 : 1
-                        };
+                       where (school is School) && ((school as School).Name == schoolName)
+                       from n in communities
+                       from pro in n.Props
+                       where (pro is Apartment) || (pro is House)
+                       where pro.ForSale.Split(':')[0] == "T"
+                       let x = Math.Pow((int)(school.X - pro.X), 2)
+                       let y = Math.Pow((int)(school.Y - pro.Y), 2)
+                       where (x + y) < Math.Pow(distance, 2)
+                       from n1 in n.Residents
+                       where n1.Id == pro.OwnerId
+                       orderby (x + y) descending
+                       select new CommunityInfo()
+                       {
+                           FullName = n1.FullName,
+                           id = pro.OwnerId,
+                           property = pro,
+                           distance = (int)Math.Sqrt(x + y),
+                           type = (pro is House) ? 0 : 1
+                       };
 
             //print the output
             PrintNearbyForSale(list);
         }
 
-        private void PrintNearbyForSale(IEnumerable <CommunityInfo> selector)
+        private void PrintNearbyForSale(IEnumerable<CommunityInfo> selector)
         {
 
             if (!selector.Any())
@@ -450,7 +458,7 @@ namespace Assign_3
             {
                 //output
                 QueryOutputTextbox.AppendText(string.Format("{0}{1} {2}, {3} {4}   {5} units away\r\n",
-                            pro.property.StreetAddr, (pro.type == 0) ? "" : " #Apt " + (pro.property as Apartment).Unit + ' ', 
+                            pro.property.StreetAddr, (pro.type == 0) ? "" : " #Apt " + (pro.property as Apartment).Unit + ' ',
                             pro.property.City, pro.property.State, pro.property.Zip, pro.distance
                             ));
 
@@ -464,10 +472,10 @@ namespace Assign_3
             }
             QueryOutputTextbox.AppendText("\r\n### END OUTPUT ###");
         }
-        
+
         //community list target
         class CommunityInfo
-        { 
+        {
             public uint id { get; set; }
             public string FullName { get; set; }
             public Property property { get; set; }
@@ -487,7 +495,7 @@ namespace Assign_3
             }
 
             QueryOutputTextbox.Text = string.Format("Properties for sale within [ {0}, {1} ] price range.\r\n" +
-                "------------------------------------------------------------------------------------------\r\n", 
+                "------------------------------------------------------------------------------------------\r\n",
                 String.Format("{0:C0}", MinPriceTrackBar.Value), String.Format("{0:C0}", MaxPriceTrackBar.Value));
 
             //list a communty and add them
@@ -498,31 +506,31 @@ namespace Assign_3
             //query
             var l = communities.GroupBy(p => p.Name);
 
-            var List =           from n2 in communities
-                                 from n in n2.Props
-                                 let forsale = n.ForSale.Split(':')
-                                 where forsale[0] == "T"
-                                 let price = Convert.ToInt32(forsale[1])
-                                 where (price >= MinPriceTrackBar.Value) && (price <= MaxPriceTrackBar.Value)
-                                 from n1 in n2.Residents
-                                 where n1.Id == n.OwnerId
-                                 orderby price ascending
-                                 select new CommunityInfo()
-                                 {
-                                     FullName = n1.FullName,
-                                     property = n,
-                                     type = (n is Business) ? 0 : (n is School) ? 1 : (n is House) ? 2 : 3
-                                 };
+            var List = from n2 in communities
+                       from n in n2.Props
+                       let forsale = n.ForSale.Split(':')
+                       where forsale[0] == "T"
+                       let price = Convert.ToInt32(forsale[1])
+                       where (price >= MinPriceTrackBar.Value) && (price <= MaxPriceTrackBar.Value)
+                       from n1 in n2.Residents
+                       where n1.Id == n.OwnerId
+                       orderby price ascending
+                       select new CommunityInfo()
+                       {
+                           FullName = n1.FullName,
+                           property = n,
+                           type = (n is Business) ? 0 : (n is School) ? 1 : (n is House) ? 2 : 3
+                       };
 
             //group it
             var fullList = List.GroupBy(p => p.property.City);
 
             //output
             printList(fullList);
-            
+
         }
 
-        private void printList(IEnumerable<IGrouping<string, CommunityInfo> > comm)
+        private void printList(IEnumerable<IGrouping<string, CommunityInfo>> comm)
         {
 
             if (!comm.Any())
@@ -538,46 +546,46 @@ namespace Assign_3
             {
                 QueryOutputTextbox.AppendText(string.Format("\r\n\t\t*** {0} ***\r\n", community.Key));
                 foreach (var pro in community)
-                if (ResidentialtCheckBox.Checked == true && (pro.type == 2 || pro.type == 3))
-                {
+                    if (ResidentialtCheckBox.Checked == true && (pro.type == 2 || pro.type == 3))
+                    {
                         results += 1;
-                    QueryOutputTextbox.AppendText(string.Format("{0}{1} {2}, {3} {4}\r\n",
-                            pro.property.StreetAddr, (pro.type == 2) ? "" : " #Apt " + (pro.property as Apartment).Unit + ' ', pro.property.City, pro.property.State, pro.property.Zip
-                            ));
+                        QueryOutputTextbox.AppendText(string.Format("{0}{1} {2}, {3} {4}\r\n",
+                                pro.property.StreetAddr, (pro.type == 2) ? "" : " #Apt " + (pro.property as Apartment).Unit + ' ', pro.property.City, pro.property.State, pro.property.Zip
+                                ));
 
-                    QueryOutputTextbox.AppendText(string.Format("Owner: {0} | ", pro.FullName));
+                        QueryOutputTextbox.AppendText(string.Format("Owner: {0} | ", pro.FullName));
 
-                    QueryOutputTextbox.AppendText(string.Format("{0} bed, {1} bath, {2} sq.ft \r\n {3} : {4}   {5:C0}\r\n\r\n",
-                            (pro.property as Residential).Bedrooms, (pro.property as Residential).Baths, (pro.property as Residential).Sqft,
-                            (pro.type == 3) ? "With out garage" : ((pro.property as House).AttatchedGarage == true) ? "With attach Garage" : "With garage",
-                            (pro.type == 3) ? "" : (pro.property as House).Flood + " floors.", Int32.Parse(pro.property.ForSale.Split(':')[1])
-                            ));
-                }
-                else if (SchoolCheckBox.Checked == true && pro.type == 1)
-                {
+                        QueryOutputTextbox.AppendText(string.Format("{0} bed, {1} bath, {2} sq.ft \r\n {3} : {4}   {5:C0}\r\n\r\n",
+                                (pro.property as Residential).Bedrooms, (pro.property as Residential).Baths, (pro.property as Residential).Sqft,
+                                (pro.type == 3) ? "With out garage" : ((pro.property as House).AttatchedGarage == true) ? "With attach Garage" : "With garage",
+                                (pro.type == 3) ? "" : (pro.property as House).Flood + " floors.", Int32.Parse(pro.property.ForSale.Split(':')[1])
+                                ));
+                    }
+                    else if (SchoolCheckBox.Checked == true && pro.type == 1)
+                    {
                         results += 1;
                         QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} Ownwer: {4}\r\n",
                     pro.property.StreetAddr, pro.property.City, pro.property.State, pro.property.Zip, pro.FullName));
 
-                    QueryOutputTextbox.AppendText(string.Format("{0}, established in {1}\r\n",
-                            (pro.property as School).Name, (pro.property as School).YearEstablished));
+                        QueryOutputTextbox.AppendText(string.Format("{0}, established in {1}\r\n",
+                                (pro.property as School).Name, (pro.property as School).YearEstablished));
 
-                    QueryOutputTextbox.AppendText(string.Format("{0} students enrooled  {1:C0}\r\n",
-                            (pro.property as School).Enrolled, Int32.Parse(pro.property.ForSale.Split(':')[1])));
-                }
-                else if (BusinessCheckBox.Checked && pro.type == 0)
-                {
+                        QueryOutputTextbox.AppendText(string.Format("{0} students enrooled  {1:C0}\r\n",
+                                (pro.property as School).Enrolled, Int32.Parse(pro.property.ForSale.Split(':')[1])));
+                    }
+                    else if (BusinessCheckBox.Checked && pro.type == 0)
+                    {
                         results += 1;
                         QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3}\r\n",
                     pro.property.StreetAddr, pro.property.City, pro.property.State, pro.property.Zip));
 
-                    QueryOutputTextbox.AppendText(string.Format("Ownwer: {0} |  {1:C0}\r\n", pro.FullName, Int32.Parse(pro.property.ForSale.Split(':')[1])));
+                        QueryOutputTextbox.AppendText(string.Format("Ownwer: {0} |  {1:C0}\r\n", pro.FullName, Int32.Parse(pro.property.ForSale.Split(':')[1])));
 
 
-                    QueryOutputTextbox.AppendText(string.Format("{0}, a {1} type of business, established in {2}\r\n\r\n",
-                            (pro.property as Business).Name, (pro.property as Business).Type, (pro.property as Business).YearEstablished
-                            ));
-                }
+                        QueryOutputTextbox.AppendText(string.Format("{0}, a {1} type of business, established in {2}\r\n\r\n",
+                                (pro.property as Business).Name, (pro.property as Business).Type, (pro.property as Business).YearEstablished
+                                ));
+                    }
             }
 
             //error output
@@ -629,6 +637,83 @@ namespace Assign_3
                 QueryOutputTextbox.AppendText(string.Format("{0}, a {1} type of business, established in {2}\r\n\r\n",
                         (pro.property as Business).Name, (pro.property as Business).Type, (pro.property as Business).YearEstablished));
             }
+        }
+        #endregion
+
+        private void Map_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            DrawMap(DekalbCommunity, g, true);
+            DrawMap(SycamoreCommunity, g, false);
+        }
+
+        private void DrawMap(Community comm, Graphics g, bool Dekalb)
+        {
+            float x_offset = 0;
+
+            if (!Dekalb)
+            {
+                x_offset = 250;
+            }
+
+            using (Pen myPen = new Pen(Brushes.Green, 3))
+            {
+                g.DrawRec(myPen, 10, 10, Map_Hight, Map_Width);
+                g.DrawLine(myPen, new Point((int)Boarder + 10, 10), new Point((int)Boarder + 10, (int)Map_Width + 10));
+            }
+
+            using (Pen myPen = new Pen(Color.Bisque))
+            {
+                var House_Property = from pro in comm.Props
+                                     where pro is House
+                                     select pro;
+                var Apart_Property = from pro in comm.Props
+                                     where pro is Apartment
+                                     select pro;
+                var Business_Property = from pro in comm.Props
+                                        where pro is Business
+                                        select pro;
+                var School_Property = from pro in comm.Props
+                                      where pro is School
+                                      select pro;
+                foreach (Property pro in House_Property)
+                    g.DrawRec(myPen, pro.X+x_offset, pro.Y, Rec_Hight, Rec_Width);
+
+                myPen.Color = Color.Orange;
+                foreach (Property pro in Apart_Property)
+                    g.DrawRec(myPen, pro.X + x_offset, pro.Y, Rec_Hight - 2, Rec_Width + 2);
+
+                myPen.Color = Color.Aqua;
+                foreach (Property pro in School_Property)
+                    g.DrawCircle(myPen, pro.X + x_offset, pro.Y, Radius);
+
+                myPen.Color = Color.Aquamarine;
+                foreach (Property pro in Business_Property)
+                    g.DrawTri(myPen, (int)pro.X + (int)x_offset, (int)pro.Y);
+            }
+        }
+    }
+
+    public static class GraphicsExtensions
+    {
+        public static void DrawCircle(this Graphics g, Pen pen,
+                                      float centerX, float centerY, float radius)
+        {
+            g.DrawEllipse(pen, centerX - radius, centerY - radius,
+                          radius + radius, radius + radius);
+        }
+
+        public static void DrawRec(this Graphics g, Pen pen,
+                                      float centerX, float centerY, float hight, float width)
+        {
+            g.DrawRectangle(pen, centerX, centerY, hight, width);
+        }
+
+        public static void DrawTri(this Graphics g, Pen pen, int x, int y)
+        {
+            g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5, y - 5));
+            g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5 / 2, y + 5));
+            g.DrawLine(pen, new Point(x + 5, y - 5), new Point(x + 5 / 2, y + 5));
         }
     }
 }
