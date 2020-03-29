@@ -476,7 +476,7 @@
             // 
             this.QueryResultsLabel.AutoSize = true;
             this.QueryResultsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.QueryResultsLabel.Location = new System.Drawing.Point(1848, 73);
+            this.QueryResultsLabel.Location = new System.Drawing.Point(1893, 37);
             this.QueryResultsLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.QueryResultsLabel.Name = "QueryResultsLabel";
             this.QueryResultsLabel.Size = new System.Drawing.Size(216, 36);
@@ -485,7 +485,7 @@
             // 
             // QueryOutputTextbox
             // 
-            this.QueryOutputTextbox.Location = new System.Drawing.Point(1831, 185);
+            this.QueryOutputTextbox.Location = new System.Drawing.Point(1899, 92);
             this.QueryOutputTextbox.Margin = new System.Windows.Forms.Padding(6);
             this.QueryOutputTextbox.Multiline = true;
             this.QueryOutputTextbox.Name = "QueryOutputTextbox";
@@ -505,7 +505,7 @@
             this.BusinessRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.BusinessRangeGroupBox.Name = "BusinessRangeGroupBox";
             this.BusinessRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
-            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(860, 169);
+            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(928, 169);
             this.BusinessRangeGroupBox.TabIndex = 5;
             this.BusinessRangeGroupBox.TabStop = false;
             this.BusinessRangeGroupBox.Text = "Hiring Business(es) Witin Range of For Sale Residence";
