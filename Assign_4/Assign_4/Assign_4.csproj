@@ -95,6 +95,7 @@
     <Content Include="DeKalb\p.txt" />
     <Content Include="DeKalb\r.txt" />
     <Content Include="DeKalb\s.txt" />
+    <Content Include="icons8-home-128.png" />
     <Content Include="Sycamore\a.txt" />
     <Content Include="Sycamore\b.txt" />
     <Content Include="Sycamore\p.txt" />
