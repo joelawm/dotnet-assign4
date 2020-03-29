@@ -33,7 +33,7 @@ namespace Assign_3
         {
             //intilaize everything
             InitializeComponent();
-            InitializeCommunity();
+            InitializeCommunity();;
             //Map.ImageLocation = "..\\..\\icons8-home-128.png";
         }
         #region start
@@ -660,8 +660,8 @@ namespace Assign_3
             using (Pen myPen = new Pen(Brushes.Green, 3))
             {
                 g.DrawRec(myPen, 10, 10, Map_Hight*Delta, Map_Width * Delta);
-                g.DrawLine(myPen, new Point((int)((Boarder + 10) * Delta), 10), 
-                            new Point((int)((Boarder + 10) * Delta), (int)((Map_Width + 10)*Delta)));
+                g.DrawLine(myPen, new Point((int)(Boarder * Delta + 10), 10), 
+                            new Point((int)(Boarder * Delta + 10), (int)(Map_Width*Delta + 10)));
             }
 
             using (Pen myPen = new Pen(Color.Bisque))
@@ -679,19 +679,19 @@ namespace Assign_3
                                       where pro is School
                                       select pro;
                 foreach (Property pro in House_Property)
-                    g.DrawRec(myPen, (pro.X+ x_offset * Delta), (pro.Y * Delta), Rec_Hight, Rec_Width);
+                    g.DrawRec(myPen, ((pro.X+ x_offset) * Delta), (pro.Y * Delta), Rec_Hight, Rec_Width);
 
                 myPen.Color = Color.Orange;
                 foreach (Property pro in Apart_Property)
-                    g.DrawRec(myPen, (pro.X + x_offset * Delta), (pro.Y * Delta), Rec_Hight - 2, Rec_Width + 2);
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta), (pro.Y * Delta), Rec_Hight - 2, Rec_Width + 2);
 
                 myPen.Color = Color.Aqua;
                 foreach (Property pro in School_Property)
-                    g.DrawCircle(myPen, (pro.X + x_offset * Delta), (pro.Y * Delta), Radius);
+                    g.DrawCircle(myPen, ((pro.X + x_offset) * Delta), (pro.Y * Delta), Radius);
 
                 myPen.Color = Color.Aquamarine;
                 foreach (Property pro in Business_Property)
-                    g.DrawTri(myPen, (int)(pro.X + x_offset * Delta), (int)(pro.Y * Delta));
+                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta), (int)(pro.Y * Delta));
             }
         }
 
@@ -700,6 +700,9 @@ namespace Assign_3
             if (Delta < 2)
             {
                 Delta *= (float)1.1;
+                Map.Width = Convert.ToInt32(Map.Width * 1.1);
+                Map.Height = Convert.ToInt32(Map.Height * 1.1);
+
             }
             Map.Refresh();
         }
@@ -709,6 +712,8 @@ namespace Assign_3
             if (Delta > 1)
             {
                 Delta /= (float)1.1;
+                Map.Width = Convert.ToInt32(Map.Width / 1.1);
+                Map.Height = Convert.ToInt32(Map.Height / 1.1);
             }
             Map.Refresh();
         }
