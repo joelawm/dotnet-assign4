@@ -2,8 +2,8 @@
  * Name: Huajian Huang; zid: z1869893
  * Partner: Joseph Meyer; zid: z1788150
  * 
- * CSCI 473 - Assignment 3
- * Function: The main fucntion of this program is to create a piece of software that allows the query of properties in DeKalb and Sycamore with a GUI.
+ * CSCI 473 - Assignment 4
+ * Function: The main fucntion of this program is to create a piece of software that allows the query of properties in DeKalb and Sycamore with a GUI and a map.
  * 
  */
 
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Assign_3
+namespace Assign_4
 {
     public partial class Form1 : Form
     {
@@ -28,6 +28,9 @@ namespace Assign_3
         public static float Map_Width = 250;
         public static float Boarder = 250;
         public static float Delta = 1;
+
+        //2 parrell lists
+        public List<Streets> StreetstoSearch = new List<Streets>();
 
         public Form1()
         {
@@ -692,6 +695,21 @@ namespace Assign_3
                 myPen.Color = Color.Aquamarine;
                 foreach (Property pro in Business_Property)
                     g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta), (int)(pro.Y * Delta));
+
+                //adding the cordinates to a list to create the grid
+                myPen.Color = Color.Black;
+                foreach (Property pro in House_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                    StreetstoSearch.Add(new Streets() { i, i2 });
+
+                    //build the streets
+                    g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
+                }
             }
         }
 
@@ -718,7 +736,7 @@ namespace Assign_3
             Map.Refresh();
         }
     }
-
+     //drawing icons and streets
     public static class GraphicsExtensions
     {
         public static void DrawCircle(this Graphics g, Pen pen,
@@ -739,6 +757,16 @@ namespace Assign_3
             g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5, y - 5));
             g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5 / 2, y + 5));
             g.DrawLine(pen, new Point(x + 5, y - 5), new Point(x + 5 / 2, y + 5));
+        }
+
+        //drawing the streets given x,y cordinates
+        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, int max_x, int max_y)
+        {
+            foreach (var num in Streets)
+            {
+            }
+            //testing
+            //g.DrawLine(pen, new Point(x + max_x, y_cords), new Point(x_cords, y_cords));
         }
     }
 }
