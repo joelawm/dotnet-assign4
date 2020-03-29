@@ -98,7 +98,7 @@
             this.PriceRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.PriceRangeGroupBox.Name = "PriceRangeGroupBox";
             this.PriceRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
-            this.PriceRangeGroupBox.Size = new System.Drawing.Size(976, 294);
+            this.PriceRangeGroupBox.Size = new System.Drawing.Size(860, 294);
             this.PriceRangeGroupBox.TabIndex = 0;
             this.PriceRangeGroupBox.TabStop = false;
             this.PriceRangeGroupBox.Text = "For Sale Properties Within Price Range";
@@ -205,7 +205,7 @@
             this.SchoolRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.SchoolRangeGroupBox.Name = "SchoolRangeGroupBox";
             this.SchoolRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
-            this.SchoolRangeGroupBox.Size = new System.Drawing.Size(978, 169);
+            this.SchoolRangeGroupBox.Size = new System.Drawing.Size(860, 169);
             this.SchoolRangeGroupBox.TabIndex = 1;
             this.SchoolRangeGroupBox.TabStop = false;
             this.SchoolRangeGroupBox.Text = "For Sale Residences Within Range of a School";
@@ -288,11 +288,11 @@
             this.ParametersGroupBox.Controls.Add(this.ApartmentCheckBox);
             this.ParametersGroupBox.Controls.Add(this.HouseCheckBox);
             this.ParametersGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ParametersGroupBox.Location = new System.Drawing.Point(28, 690);
+            this.ParametersGroupBox.Location = new System.Drawing.Point(959, 200);
             this.ParametersGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.ParametersGroupBox.Name = "ParametersGroupBox";
             this.ParametersGroupBox.Padding = new System.Windows.Forms.Padding(6);
-            this.ParametersGroupBox.Size = new System.Drawing.Size(978, 183);
+            this.ParametersGroupBox.Size = new System.Drawing.Size(856, 183);
             this.ParametersGroupBox.TabIndex = 2;
             this.ParametersGroupBox.TabStop = false;
             this.ParametersGroupBox.Text = "Specific Residence Parameters";
@@ -451,11 +451,11 @@
             // 
             this.TownersGroupBox.Controls.Add(this.TownersQueryButton);
             this.TownersGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TownersGroupBox.Location = new System.Drawing.Point(28, 885);
+            this.TownersGroupBox.Location = new System.Drawing.Point(959, 386);
             this.TownersGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.TownersGroupBox.Name = "TownersGroupBox";
             this.TownersGroupBox.Padding = new System.Windows.Forms.Padding(6);
-            this.TownersGroupBox.Size = new System.Drawing.Size(978, 112);
+            this.TownersGroupBox.Size = new System.Drawing.Size(856, 112);
             this.TownersGroupBox.TabIndex = 2;
             this.TownersGroupBox.TabStop = false;
             this.TownersGroupBox.Text = "List of Properties Owned by Out-Of-Towners";
@@ -476,7 +476,7 @@
             // 
             this.QueryResultsLabel.AutoSize = true;
             this.QueryResultsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.QueryResultsLabel.Location = new System.Drawing.Point(1014, 17);
+            this.QueryResultsLabel.Location = new System.Drawing.Point(1848, 73);
             this.QueryResultsLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.QueryResultsLabel.Name = "QueryResultsLabel";
             this.QueryResultsLabel.Size = new System.Drawing.Size(216, 36);
@@ -485,12 +485,12 @@
             // 
             // QueryOutputTextbox
             // 
-            this.QueryOutputTextbox.Location = new System.Drawing.Point(1018, 58);
+            this.QueryOutputTextbox.Location = new System.Drawing.Point(1831, 185);
             this.QueryOutputTextbox.Margin = new System.Windows.Forms.Padding(6);
             this.QueryOutputTextbox.Multiline = true;
             this.QueryOutputTextbox.Name = "QueryOutputTextbox";
             this.QueryOutputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.QueryOutputTextbox.Size = new System.Drawing.Size(1047, 370);
+            this.QueryOutputTextbox.Size = new System.Drawing.Size(268, 141);
             this.QueryOutputTextbox.TabIndex = 4;
             // 
             // BusinessRangeGroupBox
@@ -501,11 +501,11 @@
             this.BusinessRangeGroupBox.Controls.Add(this.ForSaleLabel);
             this.BusinessRangeGroupBox.Controls.Add(this.ForSaleCombobox);
             this.BusinessRangeGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BusinessRangeGroupBox.Location = new System.Drawing.Point(24, 510);
+            this.BusinessRangeGroupBox.Location = new System.Drawing.Point(959, 15);
             this.BusinessRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.BusinessRangeGroupBox.Name = "BusinessRangeGroupBox";
             this.BusinessRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
-            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(978, 169);
+            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(860, 169);
             this.BusinessRangeGroupBox.TabIndex = 5;
             this.BusinessRangeGroupBox.TabStop = false;
             this.BusinessRangeGroupBox.Text = "Hiring Business(es) Witin Range of For Sale Residence";
@@ -556,7 +556,7 @@
             // 
             this.ForSaleLabel.AutoSize = true;
             this.ForSaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ForSaleLabel.Location = new System.Drawing.Point(14, 46);
+            this.ForSaleLabel.Location = new System.Drawing.Point(12, 54);
             this.ForSaleLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.ForSaleLabel.Name = "ForSaleLabel";
             this.ForSaleLabel.Size = new System.Drawing.Size(278, 36);
@@ -567,7 +567,7 @@
             // 
             this.ForSaleCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForSaleCombobox.FormattingEnabled = true;
-            this.ForSaleCombobox.Location = new System.Drawing.Point(12, 87);
+            this.ForSaleCombobox.Location = new System.Drawing.Point(12, 98);
             this.ForSaleCombobox.Margin = new System.Windows.Forms.Padding(6);
             this.ForSaleCombobox.MaxDropDownItems = 10;
             this.ForSaleCombobox.Name = "ForSaleCombobox";
@@ -578,7 +578,7 @@
             // Map
             // 
             this.Map.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.Map.Location = new System.Drawing.Point(1020, 458);
+            this.Map.Location = new System.Drawing.Point(75, 522);
             this.Map.Name = "Map";
             this.Map.Size = new System.Drawing.Size(1045, 528);
             this.Map.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -588,9 +588,9 @@
             // 
             // ZoomIn
             // 
-            this.ZoomIn.Location = new System.Drawing.Point(2071, 458);
+            this.ZoomIn.Location = new System.Drawing.Point(30, 522);
             this.ZoomIn.Name = "ZoomIn";
-            this.ZoomIn.Size = new System.Drawing.Size(60, 57);
+            this.ZoomIn.Size = new System.Drawing.Size(39, 43);
             this.ZoomIn.TabIndex = 8;
             this.ZoomIn.Text = "+";
             this.ZoomIn.UseVisualStyleBackColor = true;
@@ -599,9 +599,9 @@
             // ZoomOut
             // 
             this.ZoomOut.AccessibleName = "";
-            this.ZoomOut.Location = new System.Drawing.Point(2071, 521);
+            this.ZoomOut.Location = new System.Drawing.Point(30, 585);
             this.ZoomOut.Name = "ZoomOut";
-            this.ZoomOut.Size = new System.Drawing.Size(60, 57);
+            this.ZoomOut.Size = new System.Drawing.Size(40, 43);
             this.ZoomOut.TabIndex = 9;
             this.ZoomOut.Text = "-";
             this.ZoomOut.UseVisualStyleBackColor = true;
@@ -611,7 +611,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2143, 1013);
+            this.ClientSize = new System.Drawing.Size(2143, 1246);
             this.Controls.Add(this.ZoomOut);
             this.Controls.Add(this.ZoomIn);
             this.Controls.Add(this.Map);
