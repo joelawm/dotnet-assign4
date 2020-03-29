@@ -65,8 +65,9 @@
             this.BusinessDistacnceLabel = new System.Windows.Forms.Label();
             this.ForSaleLabel = new System.Windows.Forms.Label();
             this.ForSaleCombobox = new System.Windows.Forms.ComboBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Map = new System.Windows.Forms.PictureBox();
+            this.ZoomIn = new System.Windows.Forms.Button();
+            this.ZoomOut = new System.Windows.Forms.Button();
             this.PriceRangeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxPriceTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinPriceTrackBar)).BeginInit();
@@ -79,7 +80,6 @@
             this.TownersGroupBox.SuspendLayout();
             this.BusinessRangeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BusinessDistanceUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             this.SuspendLayout();
             // 
@@ -575,31 +575,46 @@
             this.ForSaleCombobox.TabIndex = 0;
             this.ForSaleCombobox.DropDown += new System.EventHandler(this.ForSaleCombobox_DropDown);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
             // Map
             // 
             this.Map.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.Map.Location = new System.Drawing.Point(1020, 454);
+            this.Map.Location = new System.Drawing.Point(1020, 458);
             this.Map.Name = "Map";
             this.Map.Size = new System.Drawing.Size(1045, 528);
+            this.Map.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Map.TabIndex = 7;
             this.Map.TabStop = false;
             this.Map.Paint += new System.Windows.Forms.PaintEventHandler(this.Map_Paint);
+            // 
+            // ZoomIn
+            // 
+            this.ZoomIn.Location = new System.Drawing.Point(2071, 458);
+            this.ZoomIn.Name = "ZoomIn";
+            this.ZoomIn.Size = new System.Drawing.Size(60, 57);
+            this.ZoomIn.TabIndex = 8;
+            this.ZoomIn.Text = "+";
+            this.ZoomIn.UseVisualStyleBackColor = true;
+            this.ZoomIn.Click += new System.EventHandler(this.ZoomInClick);
+            // 
+            // ZoomOut
+            // 
+            this.ZoomOut.AccessibleName = "";
+            this.ZoomOut.Location = new System.Drawing.Point(2071, 521);
+            this.ZoomOut.Name = "ZoomOut";
+            this.ZoomOut.Size = new System.Drawing.Size(60, 57);
+            this.ZoomOut.TabIndex = 9;
+            this.ZoomOut.Text = "-";
+            this.ZoomOut.UseVisualStyleBackColor = true;
+            this.ZoomOut.Click += new System.EventHandler(this.ZoomOutClick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2092, 1013);
+            this.ClientSize = new System.Drawing.Size(2143, 1013);
+            this.Controls.Add(this.ZoomOut);
+            this.Controls.Add(this.ZoomIn);
             this.Controls.Add(this.Map);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.BusinessRangeGroupBox);
             this.Controls.Add(this.QueryOutputTextbox);
             this.Controls.Add(this.QueryResultsLabel);
@@ -626,7 +641,6 @@
             this.BusinessRangeGroupBox.ResumeLayout(false);
             this.BusinessRangeGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BusinessDistanceUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -672,8 +686,9 @@
         private System.Windows.Forms.Button ParametersQueryButton;
         private System.Windows.Forms.Button TownersQueryButton;
         private System.Windows.Forms.CheckBox DetachedGarageCheckBox;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox Map;
+        private System.Windows.Forms.Button ZoomIn;
+        private System.Windows.Forms.Button ZoomOut;
     }
 }
 

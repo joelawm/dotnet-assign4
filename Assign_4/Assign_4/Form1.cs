@@ -27,6 +27,7 @@ namespace Assign_3
         public static float Map_Hight = 500;
         public static float Map_Width = 250;
         public static float Boarder = 250;
+        public static float Delta = 1;
 
         public Form1()
         {
@@ -658,8 +659,9 @@ namespace Assign_3
 
             using (Pen myPen = new Pen(Brushes.Green, 3))
             {
-                g.DrawRec(myPen, 10, 10, Map_Hight, Map_Width);
-                g.DrawLine(myPen, new Point((int)Boarder + 10, 10), new Point((int)Boarder + 10, (int)Map_Width + 10));
+                g.DrawRec(myPen, 10, 10, Map_Hight*Delta, Map_Width * Delta);
+                g.DrawLine(myPen, new Point((int)((Boarder + 10) * Delta), 10), 
+                            new Point((int)((Boarder + 10) * Delta), (int)((Map_Width + 10)*Delta)));
             }
 
             using (Pen myPen = new Pen(Color.Bisque))
@@ -677,20 +679,38 @@ namespace Assign_3
                                       where pro is School
                                       select pro;
                 foreach (Property pro in House_Property)
-                    g.DrawRec(myPen, pro.X+x_offset, pro.Y, Rec_Hight, Rec_Width);
+                    g.DrawRec(myPen, (pro.X+ x_offset * Delta), (pro.Y * Delta), Rec_Hight, Rec_Width);
 
                 myPen.Color = Color.Orange;
                 foreach (Property pro in Apart_Property)
-                    g.DrawRec(myPen, pro.X + x_offset, pro.Y, Rec_Hight - 2, Rec_Width + 2);
+                    g.DrawRec(myPen, (pro.X + x_offset * Delta), (pro.Y * Delta), Rec_Hight - 2, Rec_Width + 2);
 
                 myPen.Color = Color.Aqua;
                 foreach (Property pro in School_Property)
-                    g.DrawCircle(myPen, pro.X + x_offset, pro.Y, Radius);
+                    g.DrawCircle(myPen, (pro.X + x_offset * Delta), (pro.Y * Delta), Radius);
 
                 myPen.Color = Color.Aquamarine;
                 foreach (Property pro in Business_Property)
-                    g.DrawTri(myPen, (int)pro.X + (int)x_offset, (int)pro.Y);
+                    g.DrawTri(myPen, (int)(pro.X + x_offset * Delta), (int)(pro.Y * Delta));
             }
+        }
+
+        private void ZoomInClick(object sender, EventArgs e)
+        {
+            if (Delta < 2)
+            {
+                Delta *= (float)1.1;
+            }
+            Map.Refresh();
+        }
+
+        private void ZoomOutClick(object sender, EventArgs e)
+        {
+            if (Delta > 1)
+            {
+                Delta /= (float)1.1;
+            }
+            Map.Refresh();
         }
     }
 
