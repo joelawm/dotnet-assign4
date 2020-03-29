@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assign_3
+namespace Assign_4
 {
     //creat the data type
     enum SchoolType { Elementary, HighSchool, CommunityCollege, University }
