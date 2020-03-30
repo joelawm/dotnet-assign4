@@ -10,9 +10,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace Assign_3
 {
@@ -26,14 +26,20 @@ namespace Assign_3
         public static float Rec_Width = 7;
         public static float Map_Hight = 500;
         public static float Map_Width = 250;
-        public static float Boarder = 250;
+        //public static float Boarder = 250;
         public static float Delta = 1;
+        public static Point Drag_press = new Point(0, 0);
+        public static Point Drag_release = new Point(0, 0);
+        public static float moveDistance_X = 0;
+        public static float moveDistance_Y = 0;
+        public static Point TopLeftCorner = new Point(0, 0);
+        public static Point ButtonRightCorner = new Point(0, 0);
 
         public Form1()
         {
             //intilaize everything
             InitializeComponent();
-            InitializeCommunity();;
+            InitializeCommunity(); ;
             //Map.ImageLocation = "..\\..\\icons8-home-128.png";
         }
         #region start
@@ -657,11 +663,18 @@ namespace Assign_3
                 x_offset = 250;
             }
 
+            if (!(Drag_press.X - Drag_release.X == 0))
+                moveDistance_X = Drag_press.X - Drag_release.X;
+            if (!(Drag_press.Y - Drag_release.Y == 0))
+                moveDistance_Y = Drag_press.Y - Drag_release.Y;
+
             using (Pen myPen = new Pen(Brushes.Green, 3))
             {
-                g.DrawRec(myPen, 10, 10, Map_Hight*Delta, Map_Width * Delta);
-                g.DrawLine(myPen, new Point((int)(Boarder * Delta + 10), 10), 
-                            new Point((int)(Boarder * Delta + 10), (int)(Map_Width*Delta + 10)));
+                g.DrawRec(myPen, 10 * Delta - moveDistance_X, 10 * Delta - moveDistance_Y,
+                            (Map_Hight * Delta) - moveDistance_X, (Map_Width * Delta) - moveDistance_Y);
+
+                //g.DrawLine(myPen, (Boarder + 10) * Delta - moveDistance_X, (0 + 10) * Delta - moveDistance_Y, 
+                //                    (Boarder + 10) * Delta - moveDistance_X, (Boarder + 10) * Delta - moveDistance_Y);
             }
 
             using (Pen myPen = new Pen(Color.Bisque))
@@ -679,19 +692,19 @@ namespace Assign_3
                                       where pro is School
                                       select pro;
                 foreach (Property pro in House_Property)
-                    g.DrawRec(myPen, ((pro.X+ x_offset) * Delta), (pro.Y * Delta), Rec_Hight, Rec_Width);
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
 
                 myPen.Color = Color.Orange;
                 foreach (Property pro in Apart_Property)
-                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta), (pro.Y * Delta), Rec_Hight - 2, Rec_Width + 2);
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
 
                 myPen.Color = Color.Aqua;
                 foreach (Property pro in School_Property)
-                    g.DrawCircle(myPen, ((pro.X + x_offset) * Delta), (pro.Y * Delta), Radius);
+                    g.DrawCircle(myPen, (pro.X + x_offset) * Delta - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Radius);
 
                 myPen.Color = Color.Aquamarine;
                 foreach (Property pro in Business_Property)
-                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta), (int)(pro.Y * Delta));
+                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta - moveDistance_X), (int)(pro.Y * Delta - moveDistance_Y));
             }
         }
 
@@ -700,8 +713,8 @@ namespace Assign_3
             if (Delta < 2)
             {
                 Delta *= (float)1.1;
-                Map.Width = Convert.ToInt32(Map.Width * 1.1);
-                Map.Height = Convert.ToInt32(Map.Height * 1.1);
+                //Map.Width = Convert.ToInt32(Map.Width * 1.1);
+                //Map.Height = Convert.ToInt32(Map.Height * 1.1);
 
             }
             Map.Refresh();
@@ -712,9 +725,31 @@ namespace Assign_3
             if (Delta > 1)
             {
                 Delta /= (float)1.1;
-                Map.Width = Convert.ToInt32(Map.Width / 1.1);
-                Map.Height = Convert.ToInt32(Map.Height / 1.1);
+                //Map.Width = Convert.ToInt32(Map.Width / 1.1);
+                //Map.Height = Convert.ToInt32(Map.Height / 1.1);
             }
+            Map.Refresh();
+        }
+
+        private void Map_MouseDown(object sender, MouseEventArgs e)
+        {
+            Drag_press = e.Location;
+        }
+
+        private void Map_MouseUp(object sender, MouseEventArgs e)
+        {
+            Drag_release = e.Location;
+            Map.Refresh();
+        }
+
+        private void reset_button_Click(object sender, EventArgs e)
+        {
+            Delta = 1;
+            Drag_press = new Point(0, 0);
+            Drag_release = new Point(0, 0);
+            moveDistance_X = 0;
+            moveDistance_Y = 0;
+
             Map.Refresh();
         }
     }
@@ -736,9 +771,9 @@ namespace Assign_3
 
         public static void DrawTri(this Graphics g, Pen pen, int x, int y)
         {
-            g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5, y - 5));
-            g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5 / 2, y + 5));
-            g.DrawLine(pen, new Point(x + 5, y - 5), new Point(x + 5 / 2, y + 5));
+            g.DrawLine(pen, new Point(x, y), new Point(x + 5, y + 5));
+            g.DrawLine(pen, new Point(x + 5, y), new Point(x, y + 5));
+            // g.DrawLine(pen, new Point(x + 5, y - 5), new Point(x + 5 / 2, y + 5));
         }
     }
 }

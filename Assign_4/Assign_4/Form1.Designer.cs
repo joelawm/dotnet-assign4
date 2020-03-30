@@ -68,6 +68,7 @@
             this.Map = new System.Windows.Forms.PictureBox();
             this.ZoomIn = new System.Windows.Forms.Button();
             this.ZoomOut = new System.Windows.Forms.Button();
+            this.reset_button = new System.Windows.Forms.Button();
             this.PriceRangeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxPriceTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinPriceTrackBar)).BeginInit();
@@ -585,6 +586,8 @@
             this.Map.TabIndex = 7;
             this.Map.TabStop = false;
             this.Map.Paint += new System.Windows.Forms.PaintEventHandler(this.Map_Paint);
+            this.Map.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Map_MouseDown);
+            this.Map.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Map_MouseUp);
             // 
             // ZoomIn
             // 
@@ -607,11 +610,22 @@
             this.ZoomOut.UseVisualStyleBackColor = true;
             this.ZoomOut.Click += new System.EventHandler(this.ZoomOutClick);
             // 
+            // reset_button
+            // 
+            this.reset_button.Location = new System.Drawing.Point(1144, 532);
+            this.reset_button.Name = "reset_button";
+            this.reset_button.Size = new System.Drawing.Size(122, 65);
+            this.reset_button.TabIndex = 10;
+            this.reset_button.Text = "Reset";
+            this.reset_button.UseVisualStyleBackColor = true;
+            this.reset_button.Click += new System.EventHandler(this.reset_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2143, 1246);
+            this.Controls.Add(this.reset_button);
             this.Controls.Add(this.ZoomOut);
             this.Controls.Add(this.ZoomIn);
             this.Controls.Add(this.Map);
@@ -689,6 +703,7 @@
         private System.Windows.Forms.PictureBox Map;
         private System.Windows.Forms.Button ZoomIn;
         private System.Windows.Forms.Button ZoomOut;
+        private System.Windows.Forms.Button reset_button;
     }
 }
 
