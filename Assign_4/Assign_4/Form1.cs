@@ -10,9 +10,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace Assign_4
 {
@@ -26,8 +26,16 @@ namespace Assign_4
         public static float Rec_Width = 7;
         public static float Map_Hight = 500;
         public static float Map_Width = 250;
-        public static float Boarder = 250;
+        //public static float Boarder = 250;
         public static float Delta = 1;
+        public static Point Drag_press = new Point(0, 0);
+        public static Point Drag_release = new Point(0, 0);
+        public static float moveDistance_X = 0;
+        public static float moveDistance_Y = 0;
+        public static Point TopLeftCorner = new Point(0, 0);
+        public static Point ButtonRightCorner = new Point(0, 0);
+        public static float x_offset = 0;
+
 
         //2 parrell lists
         public List<Streets> StreetstoSearch = new List<Streets>();
@@ -36,9 +44,12 @@ namespace Assign_4
         {
             //intilaize everything
             InitializeComponent();
-            InitializeCommunity();;
+            InitializeCommunity();
+            Map.Refresh();
+            Mapping();
             //Map.ImageLocation = "..\\..\\icons8-home-128.png";
         }
+
         #region start
         private void InitializeCommunity()
         {
@@ -150,42 +161,53 @@ namespace Assign_4
                        from n1 in n.Residents
                        where n1.Id == pro.OwnerId
                        orderby (x + y) descending
-                       select new CommunityInfo()
+                       select new
                        {
-                           id = pro.Id,
                            property = pro,
-                           FullName = n1.FullName,
-                           distance = (int)Math.Sqrt(x + y),
-                           type = (pro is House) ? 0 : 1
+                           resX = res.X,
+                           resY = res.Y,
+                           resType = (res is House)? true: false
                        };
-            //output
-            PrintNearbyBusiness(list);
 
-            QueryOutputTextbox.AppendText("\r\n### END OUTPUT ###");
-        }
 
-        private void PrintNearbyBusiness(IEnumerable<CommunityInfo> selector)
-        {
+            Map.Refresh();
+            Graphics g = Map.CreateGraphics();
 
-            if (!selector.Any())
+
+            foreach (var pro in comm.Props)
             {
-                QueryOutputTextbox.AppendText("Your Query Yeilded no Mathches");
-                return;
+                if (pro.StreetAddr != stAddr[0]) continue;
+                if (pro is House)
+                {
+                    using (Pen myPen = new Pen(Color.Bisque))
+                        g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
+
+                }
+                else
+                {
+                    using (Pen myPen = new Pen(Color.Orange))
+                        g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
+                }
             }
+
             //go through each element in the list
-            foreach (var bus in selector)
+            foreach (var pro in list)
             {
+        
 
-                QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3}\r\n",
-                    bus.property.StreetAddr, bus.property.City, bus.property.State, bus.property.Zip));
+                if (pro.property.City == "Sycamore")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
 
-                QueryOutputTextbox.AppendText(string.Format("Owner: {0} |  ", bus.FullName));
-
-
-                QueryOutputTextbox.AppendText(string.Format("{0} units away, with {1} open positions \r\n{2}, " +
-                        "a {3} type of business, established in {4}\r\n\r\n",
-                        bus.distance, (bus.property as Business).ActiveRecruitment, (bus.property as Business).Name, (bus.property as Business).Type, (bus.property as Business).YearEstablished
-                        ));
+                using (Pen myPen = new Pen(Color.Aquamarine))
+                {
+                    g.DrawTri(myPen, (int)((pro.property.X + x_offset) * Delta - moveDistance_X), (int)(pro.property.Y * Delta - moveDistance_Y));
+                }
             }
         }
 
@@ -238,76 +260,23 @@ namespace Assign_4
                 "-----------------------------------------------------------------------------------------\r\n",
                 numOfBed, numOfBath, numOfSpace, (garageCheck) ? "with garage." : "without garage.");
 
-            //counter 
-            int results = 0;
-
+            Map.Refresh();
             //create both of the list
-            List<residentialInfo> DList = ResidentialPara(DekalbCommunity);
-            List<residentialInfo> SList = ResidentialPara(SycamoreCommunity);
+            ResidentialPara(DekalbCommunity);
+            ResidentialPara(SycamoreCommunity);
 
-            //combine the 2 lists
-            DList.AddRange(SList);
 
             //reorder the list
             //DList = DList.OrderBy(i => i.ForSale).ToList();
 
-            //go throught the list and print if needed
-            foreach (var pro in DList)
-            {
-                //split the first and last name for output
-                string[] splitted = pro.FullName.Split(' ');
-
-                //checking data based on the list
-                if (HouseCheckBox.Checked == true && pro.proType == true && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value)
-                {
-                    if (GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == false && pro.Garage == true && pro.AttachedGarage == false)
-                    {
-                        QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} \r\nOwner: {4}, {5} | {6}, {7} baths, {8} sq.ft. \r\n {9} : {10}     {11:C0}\r\n\r\n",
-                           pro.StreetAddr, pro.City, pro.State, pro.Zip, splitted[1], splitted[0].Trim(new char[] { ',' }), (pro.Bed == 1) ? " bed " : pro.Bed + " beds ", pro.Bath, pro.Sqft,
-                           (!pro.Garage) ? "With out garage" : (pro.AttachedGarage == true) ? "With attach Garage" : "With  detatched garage",
-                           (pro.Flood == 1) ? pro.Flood + " floor." : pro.Flood + " floors.", Convert.ToUInt32(pro.ForSale)
-                           ));
-                        results += 1;
-                    }
-                    else if (GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == true && pro.Garage == true && pro.AttachedGarage == true)
-                    {
-                        QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} \r\nOwner: {4}, {5} | {6}, {7} baths, {8} sq.ft. \r\n {9} : {10}     {11:C0}\r\n\r\n",
-                           pro.StreetAddr, pro.City, pro.State, pro.Zip, splitted[1], splitted[0].Trim(new char[] { ',' }), (pro.Bed == 1) ? " bed " : pro.Bed + " beds ", pro.Bath, pro.Sqft,
-                           (!pro.Garage) ? "With out garage" : (pro.AttachedGarage == true) ? "With attach Garage" : "With  detatched garage",
-                           (pro.Flood == 1) ? pro.Flood + " floor." : pro.Flood + " floors.", Convert.ToUInt32(pro.ForSale)
-                           ));
-                        results += 1;
-                    }
-                    else if (GarageCheckBox.Checked == false)
-                    {
-                        QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} \r\nOwner: {4}, {5} | {6}, {7} baths, {8} sq.ft. \r\n {9} : {10}     {11:C0}\r\n\r\n",
-                           pro.StreetAddr, pro.City, pro.State, pro.Zip, splitted[1], splitted[0].Trim(new char[] { ',' }), (pro.Bed == 1) ? " bed " : pro.Bed + " beds ", pro.Bath, pro.Sqft,
-                           (!pro.Garage) ? "With out garage" : (pro.AttachedGarage == true) ? "With attach Garage" : "With  detatched garage",
-                           (pro.Flood == 1) ? pro.Flood + " floor." : pro.Flood + " floors.", Convert.ToUInt32(pro.ForSale)
-                           ));
-                        results += 1;
-                    }
-                }
-                else if (ApartmentCheckBox.Checked == true && pro.proType == false && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value && GarageCheckBox.Checked == false)
-                {
-                    QueryOutputTextbox.AppendText(string.Format("{0} Apt. # {1} {2}, {3} {4} \r\nOwner: {5}, {6} | {7}, {8} baths, {9} sq.ft. {10:C0}\r\n\r\n\r\n",
-                           pro.StreetAddr, pro.apt, pro.City, pro.State, pro.Zip, splitted[1], splitted[0].Trim(new char[] { ',' }), (pro.Bed == 1) ? " bed " : pro.Bed + " beds ", pro.Bath, pro.Sqft, Convert.ToUInt32(pro.ForSale)));
-                    results += 1;
-                }
-            }
-
-            //error output
-            if (results == 0)
-            {
-                QueryOutputTextbox.AppendText("Your query yielded no matches.\r\n");
-            }
-
-            QueryOutputTextbox.AppendText("\r\n### END OUTPUT ###");
         }
 
         //this creates a residential list of each community
-        private List<residentialInfo> ResidentialPara(Community comm)
+        private void ResidentialPara(Community comm)
         {
+            
+            Graphics g = Map.CreateGraphics();
+
             var property = from pro in comm.Props
                            where (pro is House) || (pro is Apartment)
                            let pr = pro.ForSale.Split(':')
@@ -334,10 +303,52 @@ namespace Assign_4
                                ForSale = pro.ForSale.Split(':')[1],
                                FullName = res.FullName,
                                proType = proType,
-                               apt = (proType) ? null : (pro as Apartment).Unit
+                               apt = (proType) ? null : (pro as Apartment).Unit,
+
+                               X = pro.X,
+                               Y = pro.Y
                            };
 
-            return property.ToList();
+            foreach (var pro in property)
+            {
+                if (comm.Name != "Dekalb")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
+
+                //split the first and last name for output
+                string[] splitted = pro.FullName.Split(' ');
+
+                //checking data based on the list
+                if (HouseCheckBox.Checked == true && pro.proType == true && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value)
+                {
+                    if (GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == false && pro.Garage == true && pro.AttachedGarage == false)
+                    {
+                        using (Pen myPen = new Pen(Color.Bisque))
+                            g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
+                    }
+                    else if (GarageCheckBox.Checked == true && DetachedGarageCheckBox.Checked == true && pro.Garage == true && pro.AttachedGarage == true)
+                    {
+                        using (Pen myPen = new Pen(Color.Bisque))
+                            g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
+                    }
+                    else if (GarageCheckBox.Checked == false)
+                    {
+                        using (Pen myPen = new Pen(Color.Bisque))
+                            g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
+                    }
+                }
+                else if (ApartmentCheckBox.Checked == true && pro.proType == false && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value && GarageCheckBox.Checked == false)
+                {
+                    using (Pen myPen = new Pen(Color.Orange))
+                        g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
+                }
+            }
+
         }
 
         //dropdown combo for the school and finding each school
@@ -442,39 +453,61 @@ namespace Assign_4
                            id = pro.OwnerId,
                            property = pro,
                            distance = (int)Math.Sqrt(x + y),
-                           type = (pro is House) ? 0 : 1
+                           type = (pro is House) ? 0 : 1,
                        };
 
+
+            Map.Refresh();
+            Graphics g = Map.CreateGraphics();
+
+            foreach (var pro in comm.Props)
+            {
+                if (comm.Name != "Dekalb")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
+
+                if (pro is School && (pro as School).Name == schoolName)
+                {
+                    using (Pen myPen = new Pen(Color.Aqua))
+                        g.DrawCircle(myPen, (pro.X + x_offset) * Delta - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Radius);
+                }
+            }
+
             //print the output
-            PrintNearbyForSale(list);
+            PrintNearbyForSale(list, comm, g);
         }
 
-        private void PrintNearbyForSale(IEnumerable<CommunityInfo> selector)
+        private void PrintNearbyForSale(IEnumerable<CommunityInfo> selector, Community comm, Graphics g)
         {
-
-            if (!selector.Any())
-            {
-                QueryOutputTextbox.AppendText("Your Query Yeilded no Mathches");
-                return;
-            }
             //go through the elements
             foreach (var pro in selector)
             {
-                //output
-                QueryOutputTextbox.AppendText(string.Format("{0}{1} {2}, {3} {4}   {5} units away\r\n",
-                            pro.property.StreetAddr, (pro.type == 0) ? "" : " #Apt " + (pro.property as Apartment).Unit + ' ',
-                            pro.property.City, pro.property.State, pro.property.Zip, pro.distance
-                            ));
+                if (comm.Name != "Dekalb")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
 
-                QueryOutputTextbox.AppendText(string.Format("Owner: {0} | ", pro.FullName));
+                if (pro.property is House)
+                {
+                    using (Pen myPen = new Pen(Color.Bisque))
+                        g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
 
-                QueryOutputTextbox.AppendText(string.Format("{0} bed, {1} bath, {2} sq.ft \r\n {3} : {4}   {5:C0}\r\n\r\n",
-                            (pro.property as Residential).Bedrooms, (pro.property as Residential).Baths, (pro.property as Residential).Sqft,
-                            (pro.type == 1) ? "With out garage" : ((pro.property as House).AttatchedGarage == true) ? "With attach Garage" : "With garage",
-                            (pro.type == 1) ? "" : (pro.property as House).Flood + " floors.", Int32.Parse(pro.property.ForSale.Split(':')[1])
-                            ));
+                }
+                else
+                {
+                    using (Pen myPen = new Pen(Color.Orange))
+                        g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
+                }
             }
-            QueryOutputTextbox.AppendText("\r\n### END OUTPUT ###");
         }
 
         //community list target
@@ -526,6 +559,7 @@ namespace Assign_4
                            type = (n is Business) ? 0 : (n is School) ? 1 : (n is House) ? 2 : 3
                        };
 
+
             //group it
             var fullList = List.GroupBy(p => p.property.City);
 
@@ -537,134 +571,100 @@ namespace Assign_4
         private void printList(IEnumerable<IGrouping<string, CommunityInfo>> comm)
         {
 
-            if (!comm.Any())
-            {
-                QueryOutputTextbox.AppendText("Your Query Yeilded no Mathches");
-                return;
-            }
+            Map.Refresh();
 
-            //variables temp
-            int results = 0;
+            Graphics g = Map.CreateGraphics();
+
             //go through the objects
             foreach (var community in comm)
             {
                 QueryOutputTextbox.AppendText(string.Format("\r\n\t\t*** {0} ***\r\n", community.Key));
+
+                if (community.Key == "Sycamore")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
+
                 foreach (var pro in community)
                     if (ResidentialtCheckBox.Checked == true && (pro.type == 2 || pro.type == 3))
                     {
-                        results += 1;
-                        QueryOutputTextbox.AppendText(string.Format("{0}{1} {2}, {3} {4}\r\n",
-                                pro.property.StreetAddr, (pro.type == 2) ? "" : " #Apt " + (pro.property as Apartment).Unit + ' ', pro.property.City, pro.property.State, pro.property.Zip
-                                ));
-
-                        QueryOutputTextbox.AppendText(string.Format("Owner: {0} | ", pro.FullName));
-
-                        QueryOutputTextbox.AppendText(string.Format("{0} bed, {1} bath, {2} sq.ft \r\n {3} : {4}   {5:C0}\r\n\r\n",
-                                (pro.property as Residential).Bedrooms, (pro.property as Residential).Baths, (pro.property as Residential).Sqft,
-                                (pro.type == 3) ? "With out garage" : ((pro.property as House).AttatchedGarage == true) ? "With attach Garage" : "With garage",
-                                (pro.type == 3) ? "" : (pro.property as House).Flood + " floors.", Int32.Parse(pro.property.ForSale.Split(':')[1])
-                                ));
+                        if (pro.type == 2)
+                        {
+                            using (Pen myPen = new Pen(Color.Bisque))
+                                g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
+                        }
+                        else
+                        {
+                            using (Pen myPen = new Pen(Color.Orange))
+                                g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
+                        }
+                        
                     }
                     else if (SchoolCheckBox.Checked == true && pro.type == 1)
                     {
-                        results += 1;
-                        QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3} Ownwer: {4}\r\n",
-                    pro.property.StreetAddr, pro.property.City, pro.property.State, pro.property.Zip, pro.FullName));
-
-                        QueryOutputTextbox.AppendText(string.Format("{0}, established in {1}\r\n",
-                                (pro.property as School).Name, (pro.property as School).YearEstablished));
-
-                        QueryOutputTextbox.AppendText(string.Format("{0} students enrooled  {1:C0}\r\n",
-                                (pro.property as School).Enrolled, Int32.Parse(pro.property.ForSale.Split(':')[1])));
+                        using (Pen myPen = new Pen(Color.Aqua))
+                            g.DrawCircle(myPen, (pro.property.X + x_offset) * Delta - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Radius);
                     }
                     else if (BusinessCheckBox.Checked && pro.type == 0)
                     {
-                        results += 1;
-                        QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3}\r\n",
-                    pro.property.StreetAddr, pro.property.City, pro.property.State, pro.property.Zip));
-
-                        QueryOutputTextbox.AppendText(string.Format("Ownwer: {0} |  {1:C0}\r\n", pro.FullName, Int32.Parse(pro.property.ForSale.Split(':')[1])));
-
-
-                        QueryOutputTextbox.AppendText(string.Format("{0}, a {1} type of business, established in {2}\r\n\r\n",
-                                (pro.property as Business).Name, (pro.property as Business).Type, (pro.property as Business).YearEstablished
-                                ));
+                        using (Pen myPen = new Pen(Color.Aquamarine))
+                            g.DrawTri(myPen, (int)((pro.property.X + x_offset) * Delta - moveDistance_X), (int)(pro.property.Y * Delta - moveDistance_Y));
                     }
             }
-
-            //error output
-            if (results == 0)
-            {
-                QueryOutputTextbox.AppendText("\r\nYour query yielded no matches.\r\n");
-            }
-
-            QueryOutputTextbox.AppendText("\r\n### END OUTPUT ###");
         }
 
-        //out of towners button click
-        private void TownersQueryButton_Click(object sender, EventArgs e)
-        {
-            QueryOutputTextbox.Text = string.Format("Properties Ownded by Out-Of-Towners\r\n" +
-                                                    "------------------------------------------------------------------------------------------\r\n");
-
-            PrintOutTowner(SycamoreCommunity, DekalbCommunity);
-            PrintOutTowner(DekalbCommunity, SycamoreCommunity);
-
-            QueryOutputTextbox.AppendText("\r\n### END OUTPUT ###");
-        }
-
-        // print out the person who has the property but not live in the town
-        private void PrintOutTowner(Community comm1, Community comm2)
-        {
-            //query
-            var List = from res in comm1.Residents
-                       from pro in comm2.Props
-                       where res.Id == pro.OwnerId
-                       select new
-                       {
-                           forSale = pro.ForSale.Split(':'),
-                           FullName = res.FullName,
-                           property = pro,
-                           type = (pro is Business) ? 0 : (pro is School) ? 1 : (pro is House) ? 2 : 3
-                       };
-
-            //match them to the element
-            foreach (var pro in List)
-            {
-                //output
-                QueryOutputTextbox.AppendText(string.Format("{0} {1}, {2} {3}\r\n",
-                pro.property.StreetAddr, pro.property.City, pro.property.State, pro.property.Zip));
-
-                QueryOutputTextbox.AppendText(string.Format("Ownwer: {0} |\t{1:C0}\r\n", pro.FullName, (pro.forSale[0] == "T") ? Int32.Parse(pro.forSale[1]) : 0));
-
-
-                QueryOutputTextbox.AppendText(string.Format("{0}, a {1} type of business, established in {2}\r\n\r\n",
-                        (pro.property as Business).Name, (pro.property as Business).Type, (pro.property as Business).YearEstablished));
-            }
-        }
         #endregion
 
         private void Map_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            DrawMap(DekalbCommunity, g, true);
-            DrawMap(SycamoreCommunity, g, false);
+            DrawMapStructure(DekalbCommunity, g, true);
+            DrawMapStructure(SycamoreCommunity, g, false);
         }
 
-        private void DrawMap(Community comm, Graphics g, bool Dekalb)
+        private void DrawMapStructure(Community comm, Graphics g, bool Dekalb)
         {
-            float x_offset = 0;
+            
 
-            if (!Dekalb)
-            {
-                x_offset = 250;
-            }
+            if (!(Drag_press.X - Drag_release.X == 0))
+                moveDistance_X = Drag_press.X - Drag_release.X;
+            if (!(Drag_press.Y - Drag_release.Y == 0))
+                moveDistance_Y = Drag_press.Y - Drag_release.Y;
 
             using (Pen myPen = new Pen(Brushes.Green, 3))
             {
-                g.DrawRec(myPen, 10, 10, Map_Hight*Delta, Map_Width * Delta);
-                g.DrawLine(myPen, new Point((int)(Boarder * Delta + 10), 10), 
-                            new Point((int)(Boarder * Delta + 10), (int)(Map_Width*Delta + 10)));
+                g.DrawRec(myPen, 10 * Delta - moveDistance_X, 10 * Delta - moveDistance_Y,
+                            (Map_Hight * Delta) - moveDistance_X, (Map_Width * Delta) - moveDistance_Y);
+
+                //g.DrawLine(myPen, (Boarder + 10) * Delta - moveDistance_X, (0 + 10) * Delta - moveDistance_Y, 
+                //                    (Boarder + 10) * Delta - moveDistance_X, (Boarder + 10) * Delta - moveDistance_Y);
+            }
+            /*
+
+            */
+        }
+
+        public void Mapping()
+        {
+            CreateMap(DekalbCommunity, true);
+            CreateMap(SycamoreCommunity, false);
+        }
+
+        public void CreateMap(Community comm, bool DeKalb)
+        {
+            Graphics g = Map.CreateGraphics();
+
+            if (!DeKalb)
+            {
+                x_offset = 250;
+            }
+            else
+            {
+                x_offset = 0;
             }
 
             using (Pen myPen = new Pen(Color.Bisque))
@@ -682,19 +682,19 @@ namespace Assign_4
                                       where pro is School
                                       select pro;
                 foreach (Property pro in House_Property)
-                    g.DrawRec(myPen, ((pro.X+ x_offset) * Delta), (pro.Y * Delta), Rec_Hight, Rec_Width);
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
 
                 myPen.Color = Color.Orange;
                 foreach (Property pro in Apart_Property)
-                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta), (pro.Y * Delta), Rec_Hight - 2, Rec_Width + 2);
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
 
                 myPen.Color = Color.Aqua;
                 foreach (Property pro in School_Property)
-                    g.DrawCircle(myPen, ((pro.X + x_offset) * Delta), (pro.Y * Delta), Radius);
+                    g.DrawCircle(myPen, (pro.X + x_offset) * Delta - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Radius);
 
                 myPen.Color = Color.Aquamarine;
                 foreach (Property pro in Business_Property)
-                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta), (int)(pro.Y * Delta));
+                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta - moveDistance_X), (int)(pro.Y * Delta - moveDistance_Y));
 
                 //adding the cordinates to a list to create the grid
                 myPen.Color = Color.Black;
@@ -718,8 +718,8 @@ namespace Assign_4
             if (Delta < 2)
             {
                 Delta *= (float)1.1;
-                Map.Width = Convert.ToInt32(Map.Width * 1.1);
-                Map.Height = Convert.ToInt32(Map.Height * 1.1);
+                //Map.Width = Convert.ToInt32(Map.Width * 1.1);
+                //Map.Height = Convert.ToInt32(Map.Height * 1.1);
 
             }
             Map.Refresh();
@@ -730,10 +730,33 @@ namespace Assign_4
             if (Delta > 1)
             {
                 Delta /= (float)1.1;
-                Map.Width = Convert.ToInt32(Map.Width / 1.1);
-                Map.Height = Convert.ToInt32(Map.Height / 1.1);
+                //Map.Width = Convert.ToInt32(Map.Width / 1.1);
+                //Map.Height = Convert.ToInt32(Map.Height / 1.1);
             }
             Map.Refresh();
+        }
+
+        private void Map_MouseDown(object sender, MouseEventArgs e)
+        {
+            Drag_press = e.Location;
+        }
+
+        private void Map_MouseUp(object sender, MouseEventArgs e)
+        {
+            Drag_release = e.Location;
+            Map.Refresh();
+        }
+
+        private void reset_button_Click(object sender, EventArgs e)
+        {
+            Delta = 1;
+            Drag_press = new Point(0, 0);
+            Drag_release = new Point(0, 0);
+            moveDistance_X = 0;
+            moveDistance_Y = 0;
+
+            Map.Refresh();
+            Mapping();
         }
     }
      //drawing icons and streets
@@ -754,9 +777,9 @@ namespace Assign_4
 
         public static void DrawTri(this Graphics g, Pen pen, int x, int y)
         {
-            g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5, y - 5));
-            g.DrawLine(pen, new Point(x - 5, y - 5), new Point(x + 5 / 2, y + 5));
-            g.DrawLine(pen, new Point(x + 5, y - 5), new Point(x + 5 / 2, y + 5));
+            g.DrawLine(pen, new Point(x, y), new Point(x + 5, y + 5));
+            g.DrawLine(pen, new Point(x + 5, y), new Point(x, y + 5));
+            // g.DrawLine(pen, new Point(x + 5, y - 5), new Point(x + 5 / 2, y + 5));
         }
 
         //drawing the streets given x,y cordinates

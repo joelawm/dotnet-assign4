@@ -55,8 +55,6 @@
             this.BedLabel = new System.Windows.Forms.Label();
             this.ApartmentCheckBox = new System.Windows.Forms.CheckBox();
             this.HouseCheckBox = new System.Windows.Forms.CheckBox();
-            this.TownersGroupBox = new System.Windows.Forms.GroupBox();
-            this.TownersQueryButton = new System.Windows.Forms.Button();
             this.QueryResultsLabel = new System.Windows.Forms.Label();
             this.QueryOutputTextbox = new System.Windows.Forms.TextBox();
             this.BusinessRangeGroupBox = new System.Windows.Forms.GroupBox();
@@ -68,6 +66,7 @@
             this.Map = new System.Windows.Forms.PictureBox();
             this.ZoomIn = new System.Windows.Forms.Button();
             this.ZoomOut = new System.Windows.Forms.Button();
+            this.reset_button = new System.Windows.Forms.Button();
             this.PriceRangeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxPriceTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinPriceTrackBar)).BeginInit();
@@ -77,7 +76,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.SqFtUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BathUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BedUpDown)).BeginInit();
-            this.TownersGroupBox.SuspendLayout();
             this.BusinessRangeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BusinessDistanceUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
@@ -417,6 +415,8 @@
             this.HouseCheckBox.Text = "House";
             this.HouseCheckBox.UseVisualStyleBackColor = true;
             // 
+<<<<<<< HEAD
+=======
             // TownersGroupBox
             // 
             this.TownersGroupBox.Controls.Add(this.TownersQueryButton);
@@ -439,11 +439,13 @@
             this.TownersQueryButton.UseVisualStyleBackColor = true;
             this.TownersQueryButton.Click += new System.EventHandler(this.TownersQueryButton_Click);
             // 
+>>>>>>> 80434301b731d859281464d7cc76f7f6c32c925b
             // QueryResultsLabel
             // 
             this.QueryResultsLabel.AutoSize = true;
             this.QueryResultsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.QueryResultsLabel.Location = new System.Drawing.Point(924, 38);
+            this.QueryResultsLabel.Location = new System.Drawing.Point(1893, 37);
+            this.QueryResultsLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.QueryResultsLabel.Name = "QueryResultsLabel";
             this.QueryResultsLabel.Size = new System.Drawing.Size(115, 18);
             this.QueryResultsLabel.TabIndex = 3;
@@ -451,7 +453,8 @@
             // 
             // QueryOutputTextbox
             // 
-            this.QueryOutputTextbox.Location = new System.Drawing.Point(916, 96);
+            this.QueryOutputTextbox.Location = new System.Drawing.Point(1899, 92);
+            this.QueryOutputTextbox.Margin = new System.Windows.Forms.Padding(6);
             this.QueryOutputTextbox.Multiline = true;
             this.QueryOutputTextbox.Name = "QueryOutputTextbox";
             this.QueryOutputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -468,7 +471,8 @@
             this.BusinessRangeGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BusinessRangeGroupBox.Location = new System.Drawing.Point(480, 8);
             this.BusinessRangeGroupBox.Name = "BusinessRangeGroupBox";
-            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(430, 88);
+            this.BusinessRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
+            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(928, 169);
             this.BusinessRangeGroupBox.TabIndex = 5;
             this.BusinessRangeGroupBox.TabStop = false;
             this.BusinessRangeGroupBox.Text = "Hiring Business(es) Witin Range of For Sale Residence";
@@ -544,6 +548,8 @@
             this.Map.TabIndex = 7;
             this.Map.TabStop = false;
             this.Map.Paint += new System.Windows.Forms.PaintEventHandler(this.Map_Paint);
+            this.Map.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Map_MouseDown);
+            this.Map.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Map_MouseUp);
             // 
             // ZoomIn
             // 
@@ -568,18 +574,28 @@
             this.ZoomOut.UseVisualStyleBackColor = true;
             this.ZoomOut.Click += new System.EventHandler(this.ZoomOutClick);
             // 
+            // reset_button
+            // 
+            this.reset_button.Location = new System.Drawing.Point(1144, 532);
+            this.reset_button.Name = "reset_button";
+            this.reset_button.Size = new System.Drawing.Size(122, 65);
+            this.reset_button.TabIndex = 10;
+            this.reset_button.Text = "Reset";
+            this.reset_button.UseVisualStyleBackColor = true;
+            this.reset_button.Click += new System.EventHandler(this.reset_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1072, 648);
+            this.ClientSize = new System.Drawing.Size(2143, 1246);
+            this.Controls.Add(this.reset_button);
             this.Controls.Add(this.ZoomOut);
             this.Controls.Add(this.ZoomIn);
             this.Controls.Add(this.Map);
             this.Controls.Add(this.BusinessRangeGroupBox);
             this.Controls.Add(this.QueryOutputTextbox);
             this.Controls.Add(this.QueryResultsLabel);
-            this.Controls.Add(this.TownersGroupBox);
             this.Controls.Add(this.ParametersGroupBox);
             this.Controls.Add(this.SchoolRangeGroupBox);
             this.Controls.Add(this.PriceRangeGroupBox);
@@ -597,7 +613,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.SqFtUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BathUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BedUpDown)).EndInit();
-            this.TownersGroupBox.ResumeLayout(false);
             this.BusinessRangeGroupBox.ResumeLayout(false);
             this.BusinessRangeGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BusinessDistanceUpDown)).EndInit();
@@ -612,7 +627,6 @@
         private System.Windows.Forms.GroupBox PriceRangeGroupBox;
         private System.Windows.Forms.GroupBox SchoolRangeGroupBox;
         private System.Windows.Forms.GroupBox ParametersGroupBox;
-        private System.Windows.Forms.GroupBox TownersGroupBox;
         private System.Windows.Forms.Label QueryResultsLabel;
         private System.Windows.Forms.TextBox QueryOutputTextbox;
         private System.Windows.Forms.Button PriceQueryButton;
@@ -644,11 +658,11 @@
         private System.Windows.Forms.Label BathLabel;
         private System.Windows.Forms.CheckBox GarageCheckBox;
         private System.Windows.Forms.Button ParametersQueryButton;
-        private System.Windows.Forms.Button TownersQueryButton;
         private System.Windows.Forms.CheckBox DetachedGarageCheckBox;
         private System.Windows.Forms.PictureBox Map;
         private System.Windows.Forms.Button ZoomIn;
         private System.Windows.Forms.Button ZoomOut;
+        private System.Windows.Forms.Button reset_button;
     }
 }
 

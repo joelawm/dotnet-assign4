@@ -23,5 +23,8 @@ namespace Assign_4
         public string ForSale { get; set; }
         public bool proType { get; set; }
         public string apt { get; set; }
+
+        public uint X { get; set; }
+        public uint Y { get; set; }
     }
 }
