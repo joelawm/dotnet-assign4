@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assign_3
+namespace Assign_4
 {
     //create the data type
     public enum BusinessType { Grocery, Bank, Repair, FastFood, DepartmentStore }
