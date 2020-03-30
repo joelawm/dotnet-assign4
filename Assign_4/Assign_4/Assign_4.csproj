@@ -64,6 +64,7 @@
     <Compile Include="PropertyInfo.cs" />
     <Compile Include="Residential.cs" />
     <Compile Include="School.cs" />
+    <Compile Include="Streets.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
