@@ -40,9 +40,6 @@ namespace Assign_4
         //2 parrell lists
         public List<Streets> StreetstoSearch = new List<Streets>();
 
-        //2 parrell lists
-        public List<Streets> StreetstoSearch = new List<Streets>();
-
         public Form1()
         {
             //intilaize everything
