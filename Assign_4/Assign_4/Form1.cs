@@ -705,7 +705,7 @@ namespace Assign_4
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
 
-                    StreetstoSearch.Add(new Streets() { i, i2 });
+                    //StreetstoSearch.Add(new Streets() { i, i2 });
 
                     //build the streets
                     g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
