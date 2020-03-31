@@ -832,5 +832,6 @@ namespace Assign_4
                 //testing
                 //g.DrawLine(pen, new Point(x + max_x, y_cords), new Point(x_cords, y_cords));
             }
+        }
     }
 }
