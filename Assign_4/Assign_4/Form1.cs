@@ -36,7 +36,6 @@ namespace Assign_4
         public static Point ButtonRightCorner = new Point(0, 0);
         public static float x_offset = 0;
 
-
         //2 parrell lists
         public List<Streets> StreetstoSearch = new List<Streets>();
 
@@ -705,11 +704,45 @@ namespace Assign_4
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
 
-                    StreetstoSearch.Add(new Streets(i, i2));
-
-                    //build the streets
-                    g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
                 }
+
+                //apartment street addresses
+                foreach (Property pro in Apart_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                }
+
+                //street address for school property
+                foreach (Property pro in School_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                }
+
+                //business street addresses
+                foreach (Property pro in Business_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                }
+
+                //build the streets
+                g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
+
             }
         }
 
@@ -785,16 +818,16 @@ namespace Assign_4
         //drawing the streets given x,y cordinates
         public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, int max_x, int max_y)
         {
-            //temp variables
-            //2d array???
-
             foreach (var num in Streets)
             {
+                //temp variables //// reset each time
+                List<Streets> tempStreetstoSearch = new List<Streets>();
+
                 foreach (var num2 in Streets)
                 {
                     if (num._x == num2._x)
                     {
-
+                        tempStreetstoSearch.Add(new Streets(num._x, num._y, num._streetaddr));
                     }
                 }
             }

@@ -415,31 +415,6 @@
             this.HouseCheckBox.Text = "House";
             this.HouseCheckBox.UseVisualStyleBackColor = true;
             // 
-<<<<<<< HEAD
-=======
-            // TownersGroupBox
-            // 
-            this.TownersGroupBox.Controls.Add(this.TownersQueryButton);
-            this.TownersGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TownersGroupBox.Location = new System.Drawing.Point(480, 201);
-            this.TownersGroupBox.Name = "TownersGroupBox";
-            this.TownersGroupBox.Size = new System.Drawing.Size(428, 58);
-            this.TownersGroupBox.TabIndex = 2;
-            this.TownersGroupBox.TabStop = false;
-            this.TownersGroupBox.Text = "List of Properties Owned by Out-Of-Towners";
-            // 
-            // TownersQueryButton
-            // 
-            this.TownersQueryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TownersQueryButton.Location = new System.Drawing.Point(344, 23);
-            this.TownersQueryButton.Name = "TownersQueryButton";
-            this.TownersQueryButton.Size = new System.Drawing.Size(75, 23);
-            this.TownersQueryButton.TabIndex = 9;
-            this.TownersQueryButton.Text = "Query";
-            this.TownersQueryButton.UseVisualStyleBackColor = true;
-            this.TownersQueryButton.Click += new System.EventHandler(this.TownersQueryButton_Click);
-            // 
->>>>>>> 80434301b731d859281464d7cc76f7f6c32c925b
             // QueryResultsLabel
             // 
             this.QueryResultsLabel.AutoSize = true;
