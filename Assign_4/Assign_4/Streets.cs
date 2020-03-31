@@ -11,12 +11,14 @@ namespace Assign_4
     {
         public int _x;
         public int _y;
+        public string _streetaddr;
 
         //creating the Community Object
-        public Streets(int x, int y)
+        public Streets(int x, int y, string StreetAddr)
         {
             _x = x;
             _y = y;
+            _streetaddr = StreetAddr;
         }
     }
 }

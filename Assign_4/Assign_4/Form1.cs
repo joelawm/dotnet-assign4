@@ -704,12 +704,43 @@ namespace Assign_4
                     int i = Convert.ToInt32(pro.X * Delta);
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
-
-                    //StreetstoSearch.Add(new Streets() { i, i2 });
-
-                    //build the streets
-                    g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
                 }
+
+                //apartment street addresses
+                foreach (Property pro in Apart_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                }
+
+                //street address for school property
+                foreach (Property pro in School_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                }
+
+                //business street addresses
+                foreach (Property pro in Business_Property)
+                {
+                    //X cordinate
+                    int i = Convert.ToInt32(pro.X * Delta);
+                    //y cordinate
+                    int i2 = Convert.ToInt32(pro.Y * Delta);
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                }
+
+                //build the streets
+                g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
             }
         }
 
@@ -787,9 +818,19 @@ namespace Assign_4
         {
             foreach (var num in Streets)
             {
+                //temp variables //// reset each time
+                List<Streets> tempStreetstoSearch = new List<Streets>();
+
+                foreach (var num2 in Streets)
+                {
+                    if (num._x == num2._x)
+                    {
+
+                        tempStreetstoSearch.Add(new Streets(num._x, num._y, num._streetaddr));
+                    }
+                }
+                //testing
+                //g.DrawLine(pen, new Point(x + max_x, y_cords), new Point(x_cords, y_cords));
             }
-            //testing
-            //g.DrawLine(pen, new Point(x + max_x, y_cords), new Point(x_cords, y_cords));
-        }
     }
 }
