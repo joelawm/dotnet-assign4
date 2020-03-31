@@ -56,7 +56,6 @@
             this.ApartmentCheckBox = new System.Windows.Forms.CheckBox();
             this.HouseCheckBox = new System.Windows.Forms.CheckBox();
             this.QueryResultsLabel = new System.Windows.Forms.Label();
-            this.QueryOutputTextbox = new System.Windows.Forms.TextBox();
             this.BusinessRangeGroupBox = new System.Windows.Forms.GroupBox();
             this.BusinessQueryButton = new System.Windows.Forms.Button();
             this.BusinessDistanceUpDown = new System.Windows.Forms.NumericUpDown();
@@ -456,16 +455,6 @@
             this.QueryResultsLabel.TabIndex = 3;
             this.QueryResultsLabel.Text = "Query Results";
             // 
-            // QueryOutputTextbox
-            // 
-            this.QueryOutputTextbox.Location = new System.Drawing.Point(3798, 177);
-            this.QueryOutputTextbox.Margin = new System.Windows.Forms.Padding(12);
-            this.QueryOutputTextbox.Multiline = true;
-            this.QueryOutputTextbox.Name = "QueryOutputTextbox";
-            this.QueryOutputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.QueryOutputTextbox.Size = new System.Drawing.Size(268, 141);
-            this.QueryOutputTextbox.TabIndex = 4;
-            // 
             // BusinessRangeGroupBox
             // 
             this.BusinessRangeGroupBox.Controls.Add(this.BusinessQueryButton);
@@ -478,7 +467,7 @@
             this.BusinessRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.BusinessRangeGroupBox.Name = "BusinessRangeGroupBox";
             this.BusinessRangeGroupBox.Padding = new System.Windows.Forms.Padding(12);
-            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(885, 168);
+            this.BusinessRangeGroupBox.Size = new System.Drawing.Size(953, 168);
             this.BusinessRangeGroupBox.TabIndex = 5;
             this.BusinessRangeGroupBox.TabStop = false;
             this.BusinessRangeGroupBox.Text = "Hiring Business(es) Witin Range of For Sale Residence";
@@ -587,7 +576,7 @@
             // 
             // reset_button
             // 
-            this.reset_button.Location = new System.Drawing.Point(1194, 544);
+            this.reset_button.Location = new System.Drawing.Point(955, 428);
             this.reset_button.Margin = new System.Windows.Forms.Padding(6);
             this.reset_button.Name = "reset_button";
             this.reset_button.Size = new System.Drawing.Size(109, 83);
@@ -606,7 +595,6 @@
             this.Controls.Add(this.ZoomIn);
             this.Controls.Add(this.Map);
             this.Controls.Add(this.BusinessRangeGroupBox);
-            this.Controls.Add(this.QueryOutputTextbox);
             this.Controls.Add(this.QueryResultsLabel);
             this.Controls.Add(this.ParametersGroupBox);
             this.Controls.Add(this.SchoolRangeGroupBox);
@@ -641,7 +629,6 @@
         private System.Windows.Forms.GroupBox SchoolRangeGroupBox;
         private System.Windows.Forms.GroupBox ParametersGroupBox;
         private System.Windows.Forms.Label QueryResultsLabel;
-        private System.Windows.Forms.TextBox QueryOutputTextbox;
         private System.Windows.Forms.Button PriceQueryButton;
         private System.Windows.Forms.TrackBar MaxPriceTrackBar;
         private System.Windows.Forms.Label MaxPriceLabel;
