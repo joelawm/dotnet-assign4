@@ -120,20 +120,12 @@ namespace Assign_4
         // action after clicking the 3th query button
         private void BusinessQueryButton_Click(object sender, EventArgs e)
         {
-            //exit if null
-            if (ForSaleCombobox.SelectedItem == null)
-            {
-                QueryOutputTextbox.Text = "You have not choose a school yet.";
-                return;
-            }
 
             //list of string addresses
             string[] stAddr = ForSaleCombobox.SelectedItem.ToString().Split(new[] { " # " }, StringSplitOptions.None);
             ushort distance = Convert.ToUInt16(BusinessDistanceUpDown.Value);
 
-            QueryOutputTextbox.Text = string.Format("Hiring Businesses within {0} unit of distance\r\n\tfrom {1}\r\n" +
-                                                    "------------------------------------------------------------------------------------------\r\n", distance, stAddr[0]);
-
+     
             Community comm;
 
             if (ForSaleCombobox.SelectedIndex > (DekalbCommunity.Population + 5))
@@ -141,26 +133,15 @@ namespace Assign_4
             else
                 comm = DekalbCommunity;
 
-            //create the list
-            SortedList<int, CommunityInfo> propertyList = new SortedList<int, CommunityInfo>();
-            List<Community> communities = new List<Community>();
-            communities.Add(DekalbCommunity);
-            communities.Add(SycamoreCommunity);
-
             //query
             var list = from res in comm.Props
                        where (res is House) || (res is Apartment)
                        where (res.StreetAddr == stAddr[0])
-                       from n in communities
-                       from pro in n.Props
+                       from pro in comm.Props
                        where (pro is Business)
-                       where pro.ForSale.Split(':')[0] == "T"
                        let x = Math.Pow((int)(res.X - pro.X), 2)
                        let y = Math.Pow((int)(res.Y - pro.Y), 2)
                        where (x + y) < Math.Pow(distance, 2)
-                       from n1 in n.Residents
-                       where n1.Id == pro.OwnerId
-                       orderby (x + y) descending
                        select new
                        {
                            property = pro,
@@ -176,6 +157,15 @@ namespace Assign_4
 
             foreach (var pro in comm.Props)
             {
+                if (pro.City == "Sycamore")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
+
                 if (pro.StreetAddr != stAddr[0]) continue;
                 if (pro is House)
                 {
@@ -189,6 +179,7 @@ namespace Assign_4
                         g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
                 }
             }
+
 
             //go through each element in the list
             foreach (var pro in list)
@@ -251,14 +242,6 @@ namespace Assign_4
 
         private void ParametersQueryButton_Click(object sender, EventArgs e)
         {
-            ushort numOfBath = Convert.ToUInt16(BathUpDown.Value);
-            ushort numOfBed = Convert.ToUInt16(BedUpDown.Value);
-            ushort numOfSpace = Convert.ToUInt16(SqFtUpDown.Value);
-            bool garageCheck = GarageCheckBox.Checked;
-
-            QueryOutputTextbox.Text = string.Format("House with at least {0} bed, {1} bath, and {2} sq. foot {3}\r\n" +
-                "-----------------------------------------------------------------------------------------\r\n",
-                numOfBed, numOfBath, numOfSpace, (garageCheck) ? "with garage." : "without garage.");
 
             Map.Refresh();
             //create both of the list
@@ -285,15 +268,8 @@ namespace Assign_4
                            let proType = (pro is House) ? true : false
                            let garage = (proType) ? (pro as House).Garage : false
                            let attachGarage = (garage) ? (pro as House).AttatchedGarage : false
-                           from res in comm.Residents
-                           where (res.Id == pro.OwnerId)
-                           orderby price ascending
                            select new residentialInfo()
                            {
-                               StreetAddr = pro.StreetAddr,
-                               City = pro.City,
-                               State = pro.State,
-                               Zip = pro.Zip,
                                AttachedGarage = attachGarage,
                                Garage = garage,
                                Bed = (pro as Residential).Bedrooms,
@@ -301,7 +277,6 @@ namespace Assign_4
                                Sqft = (pro as Residential).Sqft,
                                Flood = (proType) ? (pro as House).Flood : 0,
                                ForSale = pro.ForSale.Split(':')[1],
-                               FullName = res.FullName,
                                proType = proType,
                                apt = (proType) ? null : (pro as Apartment).Unit,
 
@@ -321,7 +296,6 @@ namespace Assign_4
                 }
 
                 //split the first and last name for output
-                string[] splitted = pro.FullName.Split(' ');
 
                 //checking data based on the list
                 if (HouseCheckBox.Checked == true && pro.proType == true && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value)
@@ -399,20 +373,10 @@ namespace Assign_4
         //scholl button click finds the distance betweeen schools
         private void SchoolQueryButton_Click(object sender, EventArgs e)
         {
-            //if null
-            if (SchoolCombobox.SelectedItem == null)
-            {
-                QueryOutputTextbox.Text = "Please, choose a school ";
-                return;
-            }
-
             string schoolName = SchoolCombobox.Text.ToString();
             int distance = Convert.ToInt32(SchoolDistanceUpDown.Value);
 
-            //output
-            QueryOutputTextbox.Text = string.Format("Residences for sale within {1} units of distance\r\n\tfrom {0}\r\n" +
-                "------------------------------------------------------------------------------------------\r\n", schoolName, distance);
-
+            
             //go throught elements
             int index = 0;
             foreach (var v in SchoolCombobox.Items)
@@ -444,16 +408,9 @@ namespace Assign_4
                        let x = Math.Pow((int)(school.X - pro.X), 2)
                        let y = Math.Pow((int)(school.Y - pro.Y), 2)
                        where (x + y) < Math.Pow(distance, 2)
-                       from n1 in n.Residents
-                       where n1.Id == pro.OwnerId
-                       orderby (x + y) descending
-                       select new CommunityInfo()
+                       select new
                        {
-                           FullName = n1.FullName,
-                           id = pro.OwnerId,
                            property = pro,
-                           distance = (int)Math.Sqrt(x + y),
-                           type = (pro is House) ? 0 : 1,
                        };
 
 
@@ -478,14 +435,7 @@ namespace Assign_4
                 }
             }
 
-            //print the output
-            PrintNearbyForSale(list, comm, g);
-        }
-
-        private void PrintNearbyForSale(IEnumerable<CommunityInfo> selector, Community comm, Graphics g)
-        {
-            //go through the elements
-            foreach (var pro in selector)
+            foreach (var pro in list)
             {
                 if (comm.Name != "Dekalb")
                 {
@@ -508,7 +458,9 @@ namespace Assign_4
                         g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
                 }
             }
+
         }
+
 
         //community list target
         class CommunityInfo
@@ -523,18 +475,6 @@ namespace Assign_4
         //Click of the first price button Displaying price info on different properties.
         private void PriceQueryButton_Click(object sender, EventArgs e)
         {
-            if (!ResidentialtCheckBox.Checked &&
-                !SchoolCheckBox.Checked &&
-                !BusinessCheckBox.Checked)
-            {
-                QueryOutputTextbox.Text = "You atleast have to choose one of the checkboxes";
-                return;
-            }
-
-            QueryOutputTextbox.Text = string.Format("Properties for sale within [ {0}, {1} ] price range.\r\n" +
-                "------------------------------------------------------------------------------------------\r\n",
-                String.Format("{0:C0}", MinPriceTrackBar.Value), String.Format("{0:C0}", MaxPriceTrackBar.Value));
-
             //list a communty and add them
             List<Community> communities = new List<Community>();
             communities.Add(DekalbCommunity);
@@ -549,12 +489,8 @@ namespace Assign_4
                        where forsale[0] == "T"
                        let price = Convert.ToInt32(forsale[1])
                        where (price >= MinPriceTrackBar.Value) && (price <= MaxPriceTrackBar.Value)
-                       from n1 in n2.Residents
-                       where n1.Id == n.OwnerId
-                       orderby price ascending
                        select new CommunityInfo()
                        {
-                           FullName = n1.FullName,
                            property = n,
                            type = (n is Business) ? 0 : (n is School) ? 1 : (n is House) ? 2 : 3
                        };
@@ -578,7 +514,6 @@ namespace Assign_4
             //go through the objects
             foreach (var community in comm)
             {
-                QueryOutputTextbox.AppendText(string.Format("\r\n\t\t*** {0} ***\r\n", community.Key));
 
                 if (community.Key == "Sycamore")
                 {
