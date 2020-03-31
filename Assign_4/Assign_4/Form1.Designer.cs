@@ -91,7 +91,7 @@
             this.PriceRangeGroupBox.Controls.Add(this.BusinessCheckBox);
             this.PriceRangeGroupBox.Controls.Add(this.ResidentialtCheckBox);
             this.PriceRangeGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PriceRangeGroupBox.Location = new System.Drawing.Point(36, 9);
+            this.PriceRangeGroupBox.Location = new System.Drawing.Point(24, 23);
             this.PriceRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.PriceRangeGroupBox.Name = "PriceRangeGroupBox";
             this.PriceRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
@@ -198,7 +198,7 @@
             this.SchoolRangeGroupBox.Controls.Add(this.SchoolLabel);
             this.SchoolRangeGroupBox.Controls.Add(this.SchoolCombobox);
             this.SchoolRangeGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SchoolRangeGroupBox.Location = new System.Drawing.Point(36, 315);
+            this.SchoolRangeGroupBox.Location = new System.Drawing.Point(24, 329);
             this.SchoolRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.SchoolRangeGroupBox.Name = "SchoolRangeGroupBox";
             this.SchoolRangeGroupBox.Padding = new System.Windows.Forms.Padding(6);
@@ -285,7 +285,7 @@
             this.ParametersGroupBox.Controls.Add(this.ApartmentCheckBox);
             this.ParametersGroupBox.Controls.Add(this.HouseCheckBox);
             this.ParametersGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ParametersGroupBox.Location = new System.Drawing.Point(931, 207);
+            this.ParametersGroupBox.Location = new System.Drawing.Point(960, 200);
             this.ParametersGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.ParametersGroupBox.Name = "ParametersGroupBox";
             this.ParametersGroupBox.Padding = new System.Windows.Forms.Padding(6);
@@ -463,7 +463,7 @@
             this.BusinessRangeGroupBox.Controls.Add(this.ForSaleLabel);
             this.BusinessRangeGroupBox.Controls.Add(this.ForSaleCombobox);
             this.BusinessRangeGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BusinessRangeGroupBox.Location = new System.Drawing.Point(943, 18);
+            this.BusinessRangeGroupBox.Location = new System.Drawing.Point(960, 15);
             this.BusinessRangeGroupBox.Margin = new System.Windows.Forms.Padding(6);
             this.BusinessRangeGroupBox.Name = "BusinessRangeGroupBox";
             this.BusinessRangeGroupBox.Padding = new System.Windows.Forms.Padding(12);
@@ -540,7 +540,7 @@
             // Map
             // 
             this.Map.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.Map.Location = new System.Drawing.Point(78, 521);
+            this.Map.Location = new System.Drawing.Point(92, 508);
             this.Map.Margin = new System.Windows.Forms.Padding(4);
             this.Map.Name = "Map";
             this.Map.Size = new System.Drawing.Size(1044, 529);
@@ -576,10 +576,10 @@
             // 
             // reset_button
             // 
-            this.reset_button.Location = new System.Drawing.Point(955, 428);
+            this.reset_button.Location = new System.Drawing.Point(0, 648);
             this.reset_button.Margin = new System.Windows.Forms.Padding(6);
             this.reset_button.Name = "reset_button";
-            this.reset_button.Size = new System.Drawing.Size(109, 83);
+            this.reset_button.Size = new System.Drawing.Size(82, 54);
             this.reset_button.TabIndex = 10;
             this.reset_button.Text = "Reset";
             this.reset_button.UseVisualStyleBackColor = true;
@@ -589,7 +589,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2466, 1436);
+            this.ClientSize = new System.Drawing.Size(2868, 1743);
             this.Controls.Add(this.reset_button);
             this.Controls.Add(this.ZoomOut);
             this.Controls.Add(this.ZoomIn);

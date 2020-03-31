@@ -147,7 +147,7 @@ namespace Assign_4
                            property = pro,
                            resX = res.X,
                            resY = res.Y,
-                           resType = (res is House) ? true : false
+                           resType = (res is House)? true: false
                        };
 
 
@@ -184,7 +184,7 @@ namespace Assign_4
             //go through each element in the list
             foreach (var pro in list)
             {
-
+        
 
                 if (pro.property.City == "Sycamore")
                 {
@@ -257,7 +257,7 @@ namespace Assign_4
         //this creates a residential list of each community
         private void ResidentialPara(Community comm)
         {
-
+            
             Graphics g = Map.CreateGraphics();
 
             var property = from pro in comm.Props
@@ -537,7 +537,7 @@ namespace Assign_4
                             using (Pen myPen = new Pen(Color.Orange))
                                 g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
                         }
-
+                        
                     }
                     else if (SchoolCheckBox.Checked == true && pro.type == 1)
                     {
@@ -563,7 +563,7 @@ namespace Assign_4
 
         private void DrawMapStructure(Community comm, Graphics g, bool Dekalb)
         {
-
+            
 
             if (!(Drag_press.X - Drag_release.X == 0))
                 moveDistance_X = Drag_press.X - Drag_release.X;
@@ -694,7 +694,7 @@ namespace Assign_4
             Mapping();
         }
     }
-    //drawing icons and streets
+     //drawing icons and streets
     public static class GraphicsExtensions
     {
         public static void DrawCircle(this Graphics g, Pen pen,
