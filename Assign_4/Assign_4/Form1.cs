@@ -119,12 +119,20 @@ namespace Assign_4
         // action after clicking the 3th query button
         private void BusinessQueryButton_Click(object sender, EventArgs e)
         {
+            //exit if null
+            if (ForSaleCombobox.SelectedItem == null)
+            {
+                QueryOutputTextbox.Text = "You have not choose a school yet.";
+                return;
+            }
 
             //list of string addresses
             string[] stAddr = ForSaleCombobox.SelectedItem.ToString().Split(new[] { " # " }, StringSplitOptions.None);
             ushort distance = Convert.ToUInt16(BusinessDistanceUpDown.Value);
 
-     
+            QueryOutputTextbox.Text = string.Format("Hiring Businesses within {0} unit of distance\r\n\tfrom {1}\r\n" +
+                                                    "------------------------------------------------------------------------------------------\r\n", distance, stAddr[0]);
+
             Community comm;
 
             if (ForSaleCombobox.SelectedIndex > (DekalbCommunity.Population + 5))
@@ -132,15 +140,26 @@ namespace Assign_4
             else
                 comm = DekalbCommunity;
 
+            //create the list
+            SortedList<int, CommunityInfo> propertyList = new SortedList<int, CommunityInfo>();
+            List<Community> communities = new List<Community>();
+            communities.Add(DekalbCommunity);
+            communities.Add(SycamoreCommunity);
+
             //query
             var list = from res in comm.Props
                        where (res is House) || (res is Apartment)
                        where (res.StreetAddr == stAddr[0])
-                       from pro in comm.Props
+                       from n in communities
+                       from pro in n.Props
                        where (pro is Business)
+                       where pro.ForSale.Split(':')[0] == "T"
                        let x = Math.Pow((int)(res.X - pro.X), 2)
                        let y = Math.Pow((int)(res.Y - pro.Y), 2)
                        where (x + y) < Math.Pow(distance, 2)
+                       from n1 in n.Residents
+                       where n1.Id == pro.OwnerId
+                       orderby (x + y) descending
                        select new
                        {
                            property = pro,
@@ -156,15 +175,6 @@ namespace Assign_4
 
             foreach (var pro in comm.Props)
             {
-                if (pro.City == "Sycamore")
-                {
-                    x_offset = 250;
-                }
-                else
-                {
-                    x_offset = 0;
-                }
-
                 if (pro.StreetAddr != stAddr[0]) continue;
                 if (pro is House)
                 {
@@ -178,7 +188,6 @@ namespace Assign_4
                         g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
                 }
             }
-
 
             //go through each element in the list
             foreach (var pro in list)
@@ -241,6 +250,14 @@ namespace Assign_4
 
         private void ParametersQueryButton_Click(object sender, EventArgs e)
         {
+            ushort numOfBath = Convert.ToUInt16(BathUpDown.Value);
+            ushort numOfBed = Convert.ToUInt16(BedUpDown.Value);
+            ushort numOfSpace = Convert.ToUInt16(SqFtUpDown.Value);
+            bool garageCheck = GarageCheckBox.Checked;
+
+            QueryOutputTextbox.Text = string.Format("House with at least {0} bed, {1} bath, and {2} sq. foot {3}\r\n" +
+                "-----------------------------------------------------------------------------------------\r\n",
+                numOfBed, numOfBath, numOfSpace, (garageCheck) ? "with garage." : "without garage.");
 
             Map.Refresh();
             //create both of the list
@@ -267,8 +284,15 @@ namespace Assign_4
                            let proType = (pro is House) ? true : false
                            let garage = (proType) ? (pro as House).Garage : false
                            let attachGarage = (garage) ? (pro as House).AttatchedGarage : false
+                           from res in comm.Residents
+                           where (res.Id == pro.OwnerId)
+                           orderby price ascending
                            select new residentialInfo()
                            {
+                               StreetAddr = pro.StreetAddr,
+                               City = pro.City,
+                               State = pro.State,
+                               Zip = pro.Zip,
                                AttachedGarage = attachGarage,
                                Garage = garage,
                                Bed = (pro as Residential).Bedrooms,
@@ -276,6 +300,7 @@ namespace Assign_4
                                Sqft = (pro as Residential).Sqft,
                                Flood = (proType) ? (pro as House).Flood : 0,
                                ForSale = pro.ForSale.Split(':')[1],
+                               FullName = res.FullName,
                                proType = proType,
                                apt = (proType) ? null : (pro as Apartment).Unit,
 
@@ -295,6 +320,7 @@ namespace Assign_4
                 }
 
                 //split the first and last name for output
+                string[] splitted = pro.FullName.Split(' ');
 
                 //checking data based on the list
                 if (HouseCheckBox.Checked == true && pro.proType == true && pro.Bath >= BathUpDown.Value && pro.Bed >= BedUpDown.Value && pro.Sqft >= SqFtUpDown.Value)
@@ -372,10 +398,20 @@ namespace Assign_4
         //scholl button click finds the distance betweeen schools
         private void SchoolQueryButton_Click(object sender, EventArgs e)
         {
+            //if null
+            if (SchoolCombobox.SelectedItem == null)
+            {
+                QueryOutputTextbox.Text = "Please, choose a school ";
+                return;
+            }
+
             string schoolName = SchoolCombobox.Text.ToString();
             int distance = Convert.ToInt32(SchoolDistanceUpDown.Value);
 
-            
+            //output
+            QueryOutputTextbox.Text = string.Format("Residences for sale within {1} units of distance\r\n\tfrom {0}\r\n" +
+                "------------------------------------------------------------------------------------------\r\n", schoolName, distance);
+
             //go throught elements
             int index = 0;
             foreach (var v in SchoolCombobox.Items)
@@ -407,9 +443,16 @@ namespace Assign_4
                        let x = Math.Pow((int)(school.X - pro.X), 2)
                        let y = Math.Pow((int)(school.Y - pro.Y), 2)
                        where (x + y) < Math.Pow(distance, 2)
-                       select new
+                       from n1 in n.Residents
+                       where n1.Id == pro.OwnerId
+                       orderby (x + y) descending
+                       select new CommunityInfo()
                        {
+                           FullName = n1.FullName,
+                           id = pro.OwnerId,
                            property = pro,
+                           distance = (int)Math.Sqrt(x + y),
+                           type = (pro is House) ? 0 : 1,
                        };
 
 
@@ -434,7 +477,14 @@ namespace Assign_4
                 }
             }
 
-            foreach (var pro in list)
+            //print the output
+            PrintNearbyForSale(list, comm, g);
+        }
+
+        private void PrintNearbyForSale(IEnumerable<CommunityInfo> selector, Community comm, Graphics g)
+        {
+            //go through the elements
+            foreach (var pro in selector)
             {
                 if (comm.Name != "Dekalb")
                 {
@@ -457,9 +507,7 @@ namespace Assign_4
                         g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - moveDistance_X, (pro.property.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
                 }
             }
-
         }
-
 
         //community list target
         class CommunityInfo
@@ -474,6 +522,18 @@ namespace Assign_4
         //Click of the first price button Displaying price info on different properties.
         private void PriceQueryButton_Click(object sender, EventArgs e)
         {
+            if (!ResidentialtCheckBox.Checked &&
+                !SchoolCheckBox.Checked &&
+                !BusinessCheckBox.Checked)
+            {
+                QueryOutputTextbox.Text = "You atleast have to choose one of the checkboxes";
+                return;
+            }
+
+            QueryOutputTextbox.Text = string.Format("Properties for sale within [ {0}, {1} ] price range.\r\n" +
+                "------------------------------------------------------------------------------------------\r\n",
+                String.Format("{0:C0}", MinPriceTrackBar.Value), String.Format("{0:C0}", MaxPriceTrackBar.Value));
+
             //list a communty and add them
             List<Community> communities = new List<Community>();
             communities.Add(DekalbCommunity);
@@ -488,8 +548,12 @@ namespace Assign_4
                        where forsale[0] == "T"
                        let price = Convert.ToInt32(forsale[1])
                        where (price >= MinPriceTrackBar.Value) && (price <= MaxPriceTrackBar.Value)
+                       from n1 in n2.Residents
+                       where n1.Id == n.OwnerId
+                       orderby price ascending
                        select new CommunityInfo()
                        {
+                           FullName = n1.FullName,
                            property = n,
                            type = (n is Business) ? 0 : (n is School) ? 1 : (n is House) ? 2 : 3
                        };
@@ -513,6 +577,7 @@ namespace Assign_4
             //go through the objects
             foreach (var community in comm)
             {
+                QueryOutputTextbox.AppendText(string.Format("\r\n\t\t*** {0} ***\r\n", community.Key));
 
                 if (community.Key == "Sycamore")
                 {
@@ -630,15 +695,12 @@ namespace Assign_4
                 foreach (Property pro in Business_Property)
                     g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta - moveDistance_X), (int)(pro.Y * Delta - moveDistance_Y));
 
-                //adding the cordinates to a list to create the grid
-                myPen.Color = Color.Black;
                 foreach (Property pro in House_Property)
                 {
                     //X cordinate
                     int i = Convert.ToInt32(pro.X * Delta);
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
-
                     StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
                 }
 
@@ -671,13 +733,13 @@ namespace Assign_4
                     int i = Convert.ToInt32(pro.X * Delta);
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
-
                     StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
                 }
 
                 //build the streets
-                g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
-
+                //adding the cordinates to a list to create the grid
+                myPen.Color = Color.Black;
+                g.DrawStreets(myPen, StreetstoSearch);
             }
         }
 
@@ -751,23 +813,95 @@ namespace Assign_4
         }
 
         //drawing the streets given x,y cordinates
-        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, int max_x, int max_y)
+        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets)
         {
-            foreach (var num in Streets)
-            {
-                //temp variables //// reset each time
-                List<Streets> tempStreetstoSearch = new List<Streets>();
 
-                foreach (var num2 in Streets)
+            Dictionary<int, List<Streets>> streetPairs = new Dictionary<int, List<Streets>>(Streets.Count, null);
+
+            //x cordinates
+            foreach(var street in Streets)
+            {
+
+                if (streetPairs.ContainsKey(street._x))
                 {
-                    if (num._x == num2._x)
-                    {
-                        tempStreetstoSearch.Add(new Streets(num._x, num._y, num._streetaddr));
-                    }
+                    List<Streets> forXOnly;
+                    streetPairs.TryGetValue(street._x, out forXOnly);
+                    forXOnly.Add(street);
+                } else
+                {
+                    streetPairs.Add(street._x, new List<Streets>() { street });
                 }
             }
-            //testing
-            //g.DrawLine(pen, new Point(x + max_x, y_cords), new Point(x_cords, y_cords));
+
+            foreach (var street in streetPairs)
+            {
+
+                int miny = -1;
+                int maxy = -1;
+                string road ="";
+                   
+                foreach (var stre in street.Value)
+                {
+                    if (streetPairs.Values.Count > 1)
+                    {
+                        if (miny == -1 || miny > stre._y) miny = stre._y;
+                        if (maxy == -1 || maxy < stre._y) maxy = stre._y;
+                    }
+                    road = stre._streetaddr;
+                }
+
+                if(miny != maxy)
+                {
+                    g.DrawLine(pen, new Point(street.Key, miny), new Point(street.Key, maxy));
+                    System.Diagnostics.Debug.WriteLine("For X " + street.Key + "    MinY " + miny + "     MaxY " + maxy);
+                }
+
+                //add name here
+                int middle = miny + maxy / 2;
+                //g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, middle, middle );
+            }
+
+            Dictionary<int, List<Streets>> streetPairsy = new Dictionary<int, List<Streets>>(Streets.Count, null);
+
+            //y cordinates
+            foreach (var street in Streets)
+            {
+
+                if (streetPairsy.ContainsKey(street._y))
+                {
+                    List<Streets> forYOnly;
+                    streetPairsy.TryGetValue(street._y, out forYOnly);
+                    forYOnly.Add(street);
+                }
+                else
+                {
+                    streetPairsy.Add(street._y, new List<Streets>() { street });
+                }
+            }
+
+            foreach (var street in streetPairsy)
+            {
+
+                int minx = -1;
+                int maxx = -1;
+
+                foreach (var stre in street.Value)
+                {
+                    if(streetPairsy.Values.Count > 1)
+                    {
+                        if (minx == -1 || minx > stre._y) minx = stre._x;
+                        if (maxx == -1 || maxx < stre._y) maxx = stre._x;
+                    }
+                }
+                if(minx != maxx)
+                {
+                    g.DrawLine(pen, new Point(minx, street.Key), new Point(maxx, street.Key));
+                    System.Diagnostics.Debug.WriteLine("For Y " + street.Key + "    MinX " + minx + "     MaxX " + maxx);
+                }
+
+                //add name here
+
+            }
         }
     }
 }
