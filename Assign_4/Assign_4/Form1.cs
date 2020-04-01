@@ -854,11 +854,12 @@ namespace Assign_4
                 {
                     g.DrawLine(pen, new Point(street.Key, miny), new Point(street.Key, maxy));
                     System.Diagnostics.Debug.WriteLine("For X " + street.Key + "    MinY " + miny + "     MaxY " + maxy);
-                }
 
-                //add name here
-                int middle = miny + maxy / 2;
-                //g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, middle, middle );
+
+                    //add name here
+                    int middle = miny + maxy / 2;
+                    g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, street.Key, middle);
+                }
             }
 
             Dictionary<int, List<Streets>> streetPairsy = new Dictionary<int, List<Streets>>(Streets.Count, null);
@@ -884,6 +885,7 @@ namespace Assign_4
 
                 int minx = -1;
                 int maxx = -1;
+                string road = "";
 
                 foreach (var stre in street.Value)
                 {
@@ -892,15 +894,18 @@ namespace Assign_4
                         if (minx == -1 || minx > stre._y) minx = stre._x;
                         if (maxx == -1 || maxx < stre._y) maxx = stre._x;
                     }
+
+                    road = stre._streetaddr;
                 }
                 if(minx != maxx)
                 {
                     g.DrawLine(pen, new Point(minx, street.Key), new Point(maxx, street.Key));
                     System.Diagnostics.Debug.WriteLine("For Y " + street.Key + "    MinX " + minx + "     MaxX " + maxx);
-                }
 
-                //add name here
-                //testin
+                    //add name here
+                    int middle = minx + maxx / 2;
+                    g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, middle, street.Key);
+                }
             }
         }
     }
