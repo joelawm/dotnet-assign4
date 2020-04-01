@@ -36,7 +36,6 @@ namespace Assign_4
         public static Point ButtonRightCorner = new Point(0, 0);
         public static float x_offset = 0;
 
-
         //2 parrell lists
         public List<Streets> StreetstoSearch = new List<Streets>();
 
@@ -696,8 +695,6 @@ namespace Assign_4
                 foreach (Property pro in Business_Property)
                     g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta - moveDistance_X), (int)(pro.Y * Delta - moveDistance_Y));
 
-                //adding the cordinates to a list to create the grid
-                myPen.Color = Color.Black;
                 foreach (Property pro in House_Property)
                 {
                     //X cordinate
@@ -740,7 +737,9 @@ namespace Assign_4
                 }
 
                 //build the streets
-                g.DrawStreets(myPen, StreetstoSearch, (int)((Map_Hight) * Delta), (int)((Map_Width) * Delta));
+                //adding the cordinates to a list to create the grid
+                myPen.Color = Color.Black;
+                g.DrawStreets(myPen, StreetstoSearch);
             }
         }
 
@@ -814,23 +813,94 @@ namespace Assign_4
         }
 
         //drawing the streets given x,y cordinates
-        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, int max_x, int max_y)
+        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets)
         {
-            foreach (var num in Streets)
+
+            Dictionary<int, List<Streets>> streetPairs = new Dictionary<int, List<Streets>>(Streets.Count, null);
+
+            //x cordinates
+            foreach(var street in Streets)
             {
-                //temp variables //// reset each time
-                List<Streets> tempStreetstoSearch = new List<Streets>();
 
-                foreach (var num2 in Streets)
+                if (streetPairs.ContainsKey(street._x))
                 {
-                    if (num._x == num2._x)
-                    {
+                    List<Streets> forXOnly;
+                    streetPairs.TryGetValue(street._x, out forXOnly);
+                    forXOnly.Add(street);
+                } else
+                {
+                    streetPairs.Add(street._x, new List<Streets>() { street });
+                }
+            }
 
-                        tempStreetstoSearch.Add(new Streets(num._x, num._y, num._streetaddr));
+            foreach (var street in streetPairs)
+            {
+
+                int miny = -1;
+                int maxy = -1;
+                string road ="";
+                   
+                foreach (var stre in street.Value)
+                {
+                    if (streetPairs.Values.Count > 1)
+                    {
+                        if (miny == -1 || miny > stre._y) miny = stre._y;
+                        if (maxy == -1 || maxy < stre._y) maxy = stre._y;
+                    }
+                    road = stre._streetaddr;
+                }
+
+                if(miny != maxy)
+                {
+                    g.DrawLine(pen, new Point(street.Key, miny), new Point(street.Key, maxy));
+                    System.Diagnostics.Debug.WriteLine("For X " + street.Key + "    MinY " + miny + "     MaxY " + maxy);
+                }
+
+                //add name here
+                int middle = miny + maxy / 2;
+                //g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, middle, middle );
+            }
+
+            Dictionary<int, List<Streets>> streetPairsy = new Dictionary<int, List<Streets>>(Streets.Count, null);
+
+            //y cordinates
+            foreach (var street in Streets)
+            {
+
+                if (streetPairsy.ContainsKey(street._y))
+                {
+                    List<Streets> forYOnly;
+                    streetPairsy.TryGetValue(street._y, out forYOnly);
+                    forYOnly.Add(street);
+                }
+                else
+                {
+                    streetPairsy.Add(street._y, new List<Streets>() { street });
+                }
+            }
+
+            foreach (var street in streetPairsy)
+            {
+
+                int minx = -1;
+                int maxx = -1;
+
+                foreach (var stre in street.Value)
+                {
+                    if(streetPairsy.Values.Count > 1)
+                    {
+                        if (minx == -1 || minx > stre._y) minx = stre._x;
+                        if (maxx == -1 || maxx < stre._y) maxx = stre._x;
                     }
                 }
-                //testing
-                //g.DrawLine(pen, new Point(x + max_x, y_cords), new Point(x_cords, y_cords));
+                if(minx != maxx)
+                {
+                    g.DrawLine(pen, new Point(minx, street.Key), new Point(maxx, street.Key));
+                    System.Diagnostics.Debug.WriteLine("For Y " + street.Key + "    MinX " + minx + "     MaxX " + maxx);
+                }
+
+                //add name here
+
             }
         }
     }
