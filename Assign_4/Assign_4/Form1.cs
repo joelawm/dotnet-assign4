@@ -577,15 +577,14 @@ namespace Assign_4
 
         private void Map_Paint(object sender, PaintEventArgs e)
         {
+
             Graphics g = e.Graphics;
-            DrawMapStructure(DekalbCommunity, g, true);
-            DrawMapStructure(SycamoreCommunity, g, false);
+            DrawMapStructure(DekalbCommunity, g);
+            DrawMapStructure(SycamoreCommunity, g);
         }
 
-        private void DrawMapStructure(Community comm, Graphics g, bool Dekalb)
+        private void DrawMapStructure(Community comm, Graphics g)
         {
-            
-
             if (!(Drag_press.X - Drag_release.X == 0))
                 moveDistance_X = Drag_press.X - Drag_release.X;
             if (!(Drag_press.Y - Drag_release.Y == 0))
@@ -599,30 +598,6 @@ namespace Assign_4
                 //g.DrawLine(myPen, (Boarder + 10) * Delta - moveDistance_X, (0 + 10) * Delta - moveDistance_Y, 
                 //                    (Boarder + 10) * Delta - moveDistance_X, (Boarder + 10) * Delta - moveDistance_Y);
             }
-            /*
-
-            */
-        }
-
-        public void Mapping()
-        {
-            CreateMap(DekalbCommunity, true);
-            CreateMap(SycamoreCommunity, false);
-        }
-
-        public void CreateMap(Community comm, bool DeKalb)
-        {
-            Graphics g = Map.CreateGraphics();
-
-            if (!DeKalb)
-            {
-                x_offset = 250;
-            }
-            else
-            {
-                x_offset = 0;
-            }
-
             using (Pen myPen = new Pen(Color.Bisque))
             {
                 var House_Property = from pro in comm.Props
@@ -637,20 +612,6 @@ namespace Assign_4
                 var School_Property = from pro in comm.Props
                                       where pro is School
                                       select pro;
-                foreach (Property pro in House_Property)
-                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight, Rec_Width);
-
-                myPen.Color = Color.Orange;
-                foreach (Property pro in Apart_Property)
-                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Rec_Hight - 2, Rec_Width + 2);
-
-                myPen.Color = Color.Aqua;
-                foreach (Property pro in School_Property)
-                    g.DrawCircle(myPen, (pro.X + x_offset) * Delta - moveDistance_X, (pro.Y * Delta) - moveDistance_Y, Radius);
-
-                myPen.Color = Color.Aquamarine;
-                foreach (Property pro in Business_Property)
-                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta - moveDistance_X), (int)(pro.Y * Delta - moveDistance_Y));
 
                 foreach (Property pro in House_Property)
                 {
@@ -697,7 +658,22 @@ namespace Assign_4
                 //adding the cordinates to a list to create the grid
                 myPen.Color = Color.Black;
                 g.DrawStreets(myPen, StreetstoSearch);
+
+                myPen.Dispose();
             }
+        }
+
+        public void Mapping()
+        {
+            CreateMap(DekalbCommunity);
+            CreateMap(SycamoreCommunity);
+        }
+
+        public void CreateMap(Community comm)
+        {
+            Graphics g = Map.CreateGraphics();
+
+           
         }
 
         private void ZoomInClick(object sender, EventArgs e)
