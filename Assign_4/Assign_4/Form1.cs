@@ -119,19 +119,10 @@ namespace Assign_4
         // action after clicking the 3th query button
         private void BusinessQueryButton_Click(object sender, EventArgs e)
         {
-            //exit if null
-            if (ForSaleCombobox.SelectedItem == null)
-            {
-                QueryOutputTextbox.Text = "You have not choose a school yet.";
-                return;
-            }
 
             //list of string addresses
             string[] stAddr = ForSaleCombobox.SelectedItem.ToString().Split(new[] { " # " }, StringSplitOptions.None);
             ushort distance = Convert.ToUInt16(BusinessDistanceUpDown.Value);
-
-            QueryOutputTextbox.Text = string.Format("Hiring Businesses within {0} unit of distance\r\n\tfrom {1}\r\n" +
-                                                    "------------------------------------------------------------------------------------------\r\n", distance, stAddr[0]);
 
             Community comm;
 
@@ -250,15 +241,6 @@ namespace Assign_4
 
         private void ParametersQueryButton_Click(object sender, EventArgs e)
         {
-            ushort numOfBath = Convert.ToUInt16(BathUpDown.Value);
-            ushort numOfBed = Convert.ToUInt16(BedUpDown.Value);
-            ushort numOfSpace = Convert.ToUInt16(SqFtUpDown.Value);
-            bool garageCheck = GarageCheckBox.Checked;
-
-            QueryOutputTextbox.Text = string.Format("House with at least {0} bed, {1} bath, and {2} sq. foot {3}\r\n" +
-                "-----------------------------------------------------------------------------------------\r\n",
-                numOfBed, numOfBath, numOfSpace, (garageCheck) ? "with garage." : "without garage.");
-
             Map.Refresh();
             //create both of the list
             ResidentialPara(DekalbCommunity);
@@ -398,19 +380,8 @@ namespace Assign_4
         //scholl button click finds the distance betweeen schools
         private void SchoolQueryButton_Click(object sender, EventArgs e)
         {
-            //if null
-            if (SchoolCombobox.SelectedItem == null)
-            {
-                QueryOutputTextbox.Text = "Please, choose a school ";
-                return;
-            }
-
             string schoolName = SchoolCombobox.Text.ToString();
             int distance = Convert.ToInt32(SchoolDistanceUpDown.Value);
-
-            //output
-            QueryOutputTextbox.Text = string.Format("Residences for sale within {1} units of distance\r\n\tfrom {0}\r\n" +
-                "------------------------------------------------------------------------------------------\r\n", schoolName, distance);
 
             //go throught elements
             int index = 0;
@@ -522,18 +493,6 @@ namespace Assign_4
         //Click of the first price button Displaying price info on different properties.
         private void PriceQueryButton_Click(object sender, EventArgs e)
         {
-            if (!ResidentialtCheckBox.Checked &&
-                !SchoolCheckBox.Checked &&
-                !BusinessCheckBox.Checked)
-            {
-                QueryOutputTextbox.Text = "You atleast have to choose one of the checkboxes";
-                return;
-            }
-
-            QueryOutputTextbox.Text = string.Format("Properties for sale within [ {0}, {1} ] price range.\r\n" +
-                "------------------------------------------------------------------------------------------\r\n",
-                String.Format("{0:C0}", MinPriceTrackBar.Value), String.Format("{0:C0}", MaxPriceTrackBar.Value));
-
             //list a communty and add them
             List<Community> communities = new List<Community>();
             communities.Add(DekalbCommunity);
@@ -577,8 +536,6 @@ namespace Assign_4
             //go through the objects
             foreach (var community in comm)
             {
-                QueryOutputTextbox.AppendText(string.Format("\r\n\t\t*** {0} ***\r\n", community.Key));
-
                 if (community.Key == "Sycamore")
                 {
                     x_offset = 250;
