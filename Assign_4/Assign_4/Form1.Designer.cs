@@ -589,7 +589,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2054, 1123);
+            this.ClientSize = new System.Drawing.Size(2065, 1268);
             this.Controls.Add(this.reset_button);
             this.Controls.Add(this.ZoomOut);
             this.Controls.Add(this.ZoomIn);

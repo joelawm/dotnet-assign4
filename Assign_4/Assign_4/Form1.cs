@@ -26,7 +26,6 @@ namespace Assign_4
         public static float Rec_Width = 7;
         public static float Map_Hight = 250;
         public static float Map_Width = 500;
-        //public static float Boarder = 250;
         public static float Delta = 1;
         public static Point Drag_press = new Point(0, 0);
         public static Point Drag_release = new Point(0, 0);
@@ -585,13 +584,6 @@ namespace Assign_4
 
         private void DrawMapStructure(Community comm, Graphics g)
         {
-            
-            using (Pen myPen = new Pen(Brushes.Green, 3))
-            {
-
-                //g.DrawLine(myPen, (Boarder + 10) * Delta - moveDistance_X, (0 + 10) * Delta - moveDistance_Y, 
-                //                    (Boarder + 10) * Delta - moveDistance_X, (Boarder + 10) * Delta - moveDistance_Y);
-            }
             /*
             using (Pen myPen = new Pen(Color.Bisque))
             {
@@ -766,7 +758,7 @@ namespace Assign_4
                 TopLeftCorner.Y += (Drag_press.Y - Drag_release.Y);
             else
                 TopLeftCorner.Y = CurrentMapTopLeftCorner.Y;
-            if (TopLeftCorner.Y + (Drag_press.X - Drag_release.Y) + 250 >= CurrentMapButtonRightCorner.X)
+            if (TopLeftCorner.Y + (Drag_press.X - Drag_release.Y) + 250 >= CurrentMapButtonRightCorner.Y)
                 TopLeftCorner.Y = CurrentMapButtonRightCorner.Y - 250;
 
             ButtonRightCorner.X = TopLeftCorner.X + 500;
