@@ -579,12 +579,15 @@ namespace Assign_4
         {
 
             Graphics g = e.Graphics;
+
+            g.Clear(Color.White);
             DrawMapStructure(DekalbCommunity, g);
             DrawMapStructure(SycamoreCommunity, g);
         }
 
         private void DrawMapStructure(Community comm, Graphics g)
         {
+
             if (!(Drag_press.X - Drag_release.X == 0))
                 moveDistance_X = Drag_press.X - Drag_release.X;
             if (!(Drag_press.Y - Drag_release.Y == 0))
@@ -615,49 +618,86 @@ namespace Assign_4
 
                 foreach (Property pro in House_Property)
                 {
+                    int i = 0;
                     //X cordinate
-                    int i = Convert.ToInt32(pro.X * Delta);
+                    if (pro.City == "Sycamore")
+                    {
+                        i = Convert.ToInt32((pro.X + 250) * Delta);
+                    }
+                    else
+                    {
+                        i = Convert.ToInt32(pro.X * Delta);
+                    }
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
 
                 //apartment street addresses
                 foreach (Property pro in Apart_Property)
                 {
+                    int i = 0;
                     //X cordinate
-                    int i = Convert.ToInt32(pro.X * Delta);
+                    if (pro.City == "Sycamore")
+                    {
+                        i = Convert.ToInt32((pro.X + 250) * Delta);
+                    }
+                    else
+                    {
+                        i = Convert.ToInt32(pro.X * Delta);
+                    }
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
 
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
 
                 //street address for school property
                 foreach (Property pro in School_Property)
                 {
+                    int i = 0;
                     //X cordinate
-                    int i = Convert.ToInt32(pro.X * Delta);
+                    if (pro.City == "Sycamore")
+                    {
+                        i = Convert.ToInt32((pro.X + 250)  * Delta);
+                    }
+                    else
+                    {
+                        i = Convert.ToInt32(pro.X * Delta);
+                    }
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
 
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
 
                 //business street addresses
                 foreach (Property pro in Business_Property)
                 {
+                    int i = 0;
                     //X cordinate
-                    int i = Convert.ToInt32(pro.X * Delta);
+                    if (pro.City == "Sycamore")
+                    {
+                        i = Convert.ToInt32((pro.X + 250) * Delta);
+                    }
+                    else
+                    {
+                        i = Convert.ToInt32(pro.X * Delta);
+                    }
                     //y cordinate
                     int i2 = Convert.ToInt32(pro.Y * Delta);
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr));
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
 
                 //build the streets
                 //adding the cordinates to a list to create the grid
                 myPen.Color = Color.Black;
-                g.DrawStreets(myPen, StreetstoSearch);
+                
+                //easy way to make sure I have both list
+                if(StreetstoSearch.Count > 30)
+                {
+                    g.DrawStreets(myPen, StreetstoSearch);
+                }
 
                 myPen.Dispose();
             }
@@ -672,8 +712,6 @@ namespace Assign_4
         public void CreateMap(Community comm)
         {
             Graphics g = Map.CreateGraphics();
-
-           
         }
 
         private void ZoomInClick(object sender, EventArgs e)
@@ -721,8 +759,24 @@ namespace Assign_4
             Map.Refresh();
             Mapping();
         }
+
+        //display the 
+        private void Map_MouseMove(object sender, MouseEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.X + " " + e.Y);
+            //send the reuslts of the current mouse hover to be calulated aganist a table
+            CalculatePositions(e.X, e.Y);
+        }
+
+        //finding the posititons of the mouse
+        private void CalculatePositions(int X, int Y)
+        {
+
+        }
+
     }
-     //drawing icons and streets
+
+    //drawing icons and streets
     public static class GraphicsExtensions
     {
         public static void DrawCircle(this Graphics g, Pen pen,
