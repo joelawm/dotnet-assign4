@@ -10,7 +10,7 @@ namespace Assign_4
     {
         //input data for Deklab and Sycamore 
         private const string DekalbPersonFile = "../../Dekalb/p.txt"; //Person text file
-        private const string DekalbHouseFile = "../../Dekalb/r.txt"; //resident text file
+        private const string DekalbHouseFile = "../../Dekalb/DeKalb.txt"; //resident text file
         private const string DekalbApartmentFile = "../../Dekalb/a.txt"; //apartments text file
         private const string DekalbBusinessFile = "../../Dekalb/b.txt"; //buisness text file
         private const string DekalbSchoolFile = "../../Dekalb/s.txt"; //School text file
@@ -19,7 +19,7 @@ namespace Assign_4
         public Community ActiveDekalb_Files()
         {
             ActiveCommunity active = new ActiveCommunity();
-            return active.Active_Files(DekalbPersonFile, DekalbHouseFile, DekalbApartmentFile, DekalbBusinessFile, DekalbSchoolFile, "Dekalb");
+            return active.Active_Files(DekalbPersonFile, DekalbHouseFile, DekalbApartmentFile, DekalbBusinessFile, DekalbSchoolFile, "DeKalb");
         }
     }
 }
