@@ -504,6 +504,14 @@ namespace Assign_4
 
         private void DrawMapStructure(Community comm, Graphics g)
         {
+            using (Font myFont = new Font("Arial", 5))
+            {
+                g.DrawString("|--------|--------|", myFont, Brushes.Green, new Point(465, 10));
+                g.DrawString(String.Format("{0}     {1, 0:0.#}     {2, 0:0.#}", 0 * Delta, 25 * Delta, 50 * Delta),
+                                    myFont, Brushes.Green, new Point(465, 15));
+            }
+
+
             using (Pen myPen = new Pen(Color.Bisque))
             {
                 var House_Property = from pro in comm.Props
