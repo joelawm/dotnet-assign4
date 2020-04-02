@@ -506,95 +506,12 @@ namespace Assign_4
         {
             using (Pen myPen = new Pen(Color.Bisque))
             {
-                var House_Property = from pro in comm.Props
-                                     where pro is House
-                                     select pro;
-                var Apart_Property = from pro in comm.Props
-                                     where pro is Apartment
-                                     select pro;
-                var Business_Property = from pro in comm.Props
-                                        where pro is Business
-                                        select pro;
-                var School_Property = from pro in comm.Props
-                                      where pro is School
-                                      select pro;
-         
-                foreach (Property pro in House_Property)
-                {
-                    int i = 0;
-                    //X cordinate
-                    if (pro.City == "Sycamore")
-                    {
-                        i = Convert.ToInt32((pro.X + 250) * Delta);
-                    }
-                    else
-                    {
-                        i = Convert.ToInt32(pro.X * Delta);
-                    }
-                    //y cordinate
-                    int i2 = Convert.ToInt32(pro.Y * Delta);
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
-                }
-
-                //apartment street addresses
-                foreach (Property pro in Apart_Property)
-                {
-                    int i = 0;
-                    //X cordinate
-                    if (pro.City == "Sycamore")
-                    {
-                        i = Convert.ToInt32((pro.X + 250) * Delta);
-                    }
-                    else
-                    {
-                        i = Convert.ToInt32(pro.X * Delta);
-                    }
-                    //y cordinate
-                    int i2 = Convert.ToInt32(pro.Y * Delta);
-
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
-                }
-
-                //street address for school property
-                foreach (Property pro in School_Property)
-                {
-                    int i = 0;
-                    //X cordinate
-                    if (pro.City == "Sycamore")
-                    {
-                        i = Convert.ToInt32((pro.X + 250) * Delta);
-                    }
-                    else
-                    {
-                        i = Convert.ToInt32(pro.X * Delta);
-                    }
-                    //y cordinate
-                    int i2 = Convert.ToInt32(pro.Y * Delta);
-
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
-                }
-
-                //business street addresses
-                foreach (Property pro in Business_Property)
-                {
-                    int i = 0;
-                    //X cordinate
-                    if (pro.City == "Sycamore")
-                    {
-                        i = Convert.ToInt32((pro.X + 250) * Delta);
-                    }
-                    else
-                    {
-                        i = Convert.ToInt32(pro.X * Delta);
-                    }
-                    //y cordinate
-                    int i2 = Convert.ToInt32(pro.Y * Delta);
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
-                }
-
                 //build the streets
                 //adding the cordinates to a list to create the grid
                 myPen.Color = Color.Black;
+
+                buildlist(DekalbCommunity);
+                buildlist(SycamoreCommunity);
 
                 //easy way to make sure I have both list
                 if (StreetstoSearch.Count > 30)
@@ -604,6 +521,95 @@ namespace Assign_4
                 }
 
                 myPen.Dispose();
+            }
+        }
+
+        public void buildlist(Community comm)
+        {
+            var House_Property = from pro in comm.Props
+                                 where pro is House
+                                 select pro;
+            var Apart_Property = from pro in comm.Props
+                                 where pro is Apartment
+                                 select pro;
+            var Business_Property = from pro in comm.Props
+                                    where pro is Business
+                                    select pro;
+            var School_Property = from pro in comm.Props
+                                  where pro is School
+                                  select pro;
+
+            foreach (Property pro in House_Property)
+            {
+                int i = 0;
+                //X cordinate
+                if (pro.City == "Sycamore")
+                {
+                    i = Convert.ToInt32((pro.X + 250) * Delta);
+                }
+                else
+                {
+                    i = Convert.ToInt32(pro.X * Delta);
+                }
+                //y cordinate
+                int i2 = Convert.ToInt32(pro.Y * Delta);
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+            }
+
+            //apartment street addresses
+            foreach (Property pro in Apart_Property)
+            {
+                int i = 0;
+                //X cordinate
+                if (pro.City == "Sycamore")
+                {
+                    i = Convert.ToInt32((pro.X + 250) * Delta);
+                }
+                else
+                {
+                    i = Convert.ToInt32(pro.X * Delta);
+                }
+                //y cordinate
+                int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+            }
+
+            //street address for school property
+            foreach (Property pro in School_Property)
+            {
+                int i = 0;
+                //X cordinate
+                if (pro.City == "Sycamore")
+                {
+                    i = Convert.ToInt32((pro.X + 250) * Delta);
+                }
+                else
+                {
+                    i = Convert.ToInt32(pro.X * Delta);
+                }
+                //y cordinate
+                int i2 = Convert.ToInt32(pro.Y * Delta);
+
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+            }
+
+            //business street addresses
+            foreach (Property pro in Business_Property)
+            {
+                int i = 0;
+                //X cordinate
+                if (pro.City == "Sycamore")
+                {
+                    i = Convert.ToInt32((pro.X + 250) * Delta);
+                }
+                else
+                {
+                    i = Convert.ToInt32(pro.X * Delta);
+                }
+                //y cordinate
+                int i2 = Convert.ToInt32(pro.Y * Delta);
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
             }
         }
 
@@ -723,22 +729,46 @@ namespace Assign_4
         private void Map_MouseMove(object sender, MouseEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine(e.X + " " + e.Y);
+            System.Drawing.Point mouse = e.Location;
             //send the reuslts of the current mouse hover to be calulated aganist a table
-            CalculatePositions(e.X, e.Y);
+            CalculatePositions(e.X, e.Y, mouse);
         }
 
         //finding the posititons of the mouse
-        private void CalculatePositions(int X, int Y)
+        //finding the posititons of the mouse
+        private void CalculatePositions(int X, int Y, System.Drawing.Point mouse)
         {
-            if (StreetstoSearch != null)
+            //build the communitieis
+            if (StreetstoSearch.Count < 30)
+            {
+                buildlist(DekalbCommunity);
+                buildlist(SycamoreCommunity);
+            }
+
+            if (StreetstoSearch.Count > 30)
             {
                 foreach (var street in StreetstoSearch)
                 {
-                    if ((X * Delta) >= street._x && X <= (street._x + 5))
+                    if ((X * Delta) >= (street._x * Delta) && (X * Delta) <= ((street._x * Delta) + 5))
                     {
-                        if ((Y * Delta) >= street._y && Y <= (street._y + 5))
+                        if ((Y * Delta) >= (street._y * Delta) && (Y * Delta) <= ((street._y * Delta) + 5))
                         {
-                            MessageBox.Show("Hello, world.");
+                            ToolTip tt = new ToolTip();
+                            IWin32Window win = this;
+                            string[] ForSale = street._forsale.Split(':');
+
+                            if (ForSale[0] == "T")
+                            {
+                                ForSale[0] = "Yes.";
+                            }
+                            else
+                            {
+                                ForSale[0] = "No.";
+                            }
+                            //String.Format("{0:C0}", ForSale[1]);
+                            // + "Price: " + ForSale[1]
+                            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + ForSale[0] + "\r\n", win, mouse, 500);
+                            break;
                         }
                     }
                 }
