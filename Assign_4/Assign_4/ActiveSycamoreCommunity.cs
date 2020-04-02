@@ -10,7 +10,7 @@ namespace Assign_4
     {
         //load sycamore files
         private const string SycamorePersonFile = "../../Sycamore/p.txt"; //person text file
-        private const string SycamoreHouseFile = "../../Sycamore/r.txt"; //resident text file
+        private const string SycamoreHouseFile = "../../Sycamore/Sycamore.txt"; //resident text file
         private const string SycamoreApartmentFile = "../../Sycamore/a.txt"; //apartment text file
         private const string SycamoreBusinessFile = "../../Sycamore/b.txt"; //buisness text file
         private const string SycamoreSchoolFile = "../../Sycamore/s.txt"; //school text file
