@@ -150,26 +150,18 @@ namespace Assign_4
             else
                 comm = DekalbCommunity;
 
-            //create the list
-            SortedList<int, CommunityInfo> propertyList = new SortedList<int, CommunityInfo>();
-            List<Community> communities = new List<Community>();
-            communities.Add(DekalbCommunity);
-            communities.Add(SycamoreCommunity);
-
+            
             //query
             var list = from res in comm.Props
                        where (res is House) || (res is Apartment)
                        where (res.StreetAddr == stAddr[0])
-                       from n in communities
-                       from pro in n.Props
+                       from pro in comm.Props
                        where (pro is Business)
                        where pro.ForSale.Split(':')[0] == "T"
-                       select new
-                       {
-                           resX = res.X, 
-                           resY = res.Y,
-                           property = pro
-                       };
+                       let x = Math.Pow((int)(res.X - pro.X), 2)
+                       let y = Math.Pow((int)(res.Y - pro.Y), 2)
+                       where (x + y) < Math.Pow(distance, 2)
+                       select pro;
 
             coord.Clear();
 
@@ -192,9 +184,7 @@ namespace Assign_4
             //go through each element in the list
             foreach (var pro in list)
             {
-                int d;
-
-                if (pro.property.City == "Sycamore")
+                if (pro.City == "Sycamore")
                 {
                     x_offset = 250;
                 }
@@ -203,11 +193,7 @@ namespace Assign_4
                     x_offset = 0;
                 }
 
-
-                double x = Math.Pow((int)(pro.resX - pro.property.X), 2);
-                double y = Math.Pow((int)(pro.resY - pro.property.Y), 2);
-                if ((x + y) < Math.Pow(distance, 2))
-                    coord.Add(new coordinate(pro.property.X + x_offset, pro.property.Y, 4));
+                coord.Add(new coordinate(pro.X + x_offset, pro.Y, 4));
             }
             
             Map.Refresh();
@@ -385,13 +371,6 @@ namespace Assign_4
                     break;
 
 
-            SortedList<int, CommunityInfo> propertyList = new SortedList<int, CommunityInfo>();
-
-            //make communites
-            List<Community> communities = new List<Community>();
-            communities.Add(DekalbCommunity);
-            communities.Add(SycamoreCommunity);
-
             Community comm;
             if (SchoolCombobox.SelectedIndex < index)
                 comm = DekalbCommunity;
@@ -400,8 +379,7 @@ namespace Assign_4
             //query
             var list = from school in comm.Props
                        where (school is School) && ((school as School).Name == schoolName)
-                       from n in communities
-                       from pro in n.Props
+                       from pro in comm.Props
                        where (pro is Apartment) || (pro is House)
                        where pro.ForSale.Split(':')[0] == "T"
                        let x = Math.Pow((int)(school.X - pro.X), 2)
@@ -413,11 +391,27 @@ namespace Assign_4
 
             Graphics g = Map.CreateGraphics();
 
+            foreach (var pro in comm.Props)
+            {
+                if (!(pro is School) || (pro as School).Name != schoolName) continue;
+
+                if (pro.City == "Sycamore")
+                {
+                    x_offset = 250;
+                }
+                else
+                {
+                    x_offset = 0;
+                }
+
+                coord.Add(new coordinate(pro.X + x_offset, pro.Y, 3));
+            }
+
             //print the output
             //go through the elements
             foreach (var pro in list)
             {
-                if (comm.Name != "Dekalb")
+                if (comm.Name != "DeKalb")
                 {
                     x_offset = 250;
                 }
@@ -463,36 +457,19 @@ namespace Assign_4
                        where forsale[0] == "T"
                        let price = Convert.ToInt32(forsale[1])
                        where (price >= MinPriceTrackBar.Value) && (price <= MaxPriceTrackBar.Value)
-                       from n1 in n2.Residents
-                       where n1.Id == n.OwnerId
-                       orderby price ascending
                        select new CommunityInfo()
                        {
-                           FullName = n1.FullName,
                            property = n,
                            type = (n is Business) ? 0 : (n is School) ? 1 : (n is House) ? 2 : 3
                        };
 
-
-            //group it
-            var fullList = List.GroupBy(p => p.property.City);
-
-            //output
-            printList(fullList);
-
-        }
-
-        private void printList(IEnumerable<IGrouping<string, CommunityInfo>> comm)
-        {
-
-            Map.Refresh();
+            coord.Clear();
 
             Graphics g = Map.CreateGraphics();
 
-            //go through the objects
-            foreach (var community in comm)
+            foreach (var pro in List)
             {
-                if (community.Key == "Sycamore")
+                if (pro.property.City == "Sycamore")
                 {
                     x_offset = 250;
                 }
@@ -501,40 +478,31 @@ namespace Assign_4
                     x_offset = 0;
                 }
 
-                foreach (var pro in community)
-                    if (ResidentialtCheckBox.Checked == true && (pro.type == 2 || pro.type == 3))
+                if (ResidentialtCheckBox.Checked == true && (pro.type == 2 || pro.type == 3))
+                {
+                    if (pro.type == 2)
                     {
-                        if (pro.type == 2)
-                        {
-                            using (Pen myPen = new Pen(Color.Bisque))
-                                g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - (TopLeftCorner.X - CurrentMapTopLeftCorner.X),
-                                      (pro.property.Y * Delta) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y),
-                                      Rec_Hight, Rec_Width);
-                        }
-                        else
-                        {
-                            using (Pen myPen = new Pen(Color.Orange))
-                                g.DrawRec(myPen, ((pro.property.X + x_offset) * Delta) - (TopLeftCorner.X - CurrentMapTopLeftCorner.X),
-                                        (pro.property.Y * Delta) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y),
-                                         Rec_Hight - 2, Rec_Width + 2);
-                        }
-                        
+                            coord.Add(new coordinate(pro.property.X + x_offset, pro.property.Y, 1));
                     }
-                    else if (SchoolCheckBox.Checked == true && pro.type == 1)
+                    else
                     {
-                        using (Pen myPen = new Pen(Color.Aqua))
-                            g.DrawCircle(myPen, (pro.property.X + x_offset) * Delta - (TopLeftCorner.X - CurrentMapTopLeftCorner.X),
-                                        (pro.property.Y * Delta) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y),
-                                        Radius);
+                            coord.Add(new coordinate(pro.property.X + x_offset, pro.property.Y, 2));
                     }
-                    else if (BusinessCheckBox.Checked && pro.type == 0)
-                    {
-                        using (Pen myPen = new Pen(Color.Aquamarine))
-                            g.DrawTri(myPen, (int)((pro.property.X + x_offset) * Delta - moveDistance_X), (int)(pro.property.Y * Delta - moveDistance_Y));
-                    }
-            }
-        }
 
+                }
+                else if (SchoolCheckBox.Checked == true && pro.type == 1)
+                {
+                        coord.Add(new coordinate(pro.property.X + x_offset, pro.property.Y, 3));
+                }
+                else if (BusinessCheckBox.Checked && pro.type == 0)
+                {
+                        coord.Add(new coordinate(pro.property.X + x_offset, pro.property.Y, 4));
+                }
+            }
+
+            Map.Refresh();
+
+        }
         #endregion
 
 
