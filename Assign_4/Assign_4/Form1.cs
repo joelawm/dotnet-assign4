@@ -37,8 +37,6 @@ namespace Assign_4
         public static float x_offset = 0;
         public static Point CurrentMapTopLeftCorner = new Point(0, 0);
         public static Point CurrentMapButtonRightCorner = new Point(500, 250);
-
-        //2 parrell lists
         public List<Streets> StreetstoSearch = new List<Streets>();
 
         public Form1()
@@ -46,7 +44,6 @@ namespace Assign_4
             //intilaize everything
             InitializeComponent();
             InitializeCommunity();
-            //Map.ImageLocation = "..\\..\\icons8-home-128.png";
         }
 
         #region start
@@ -575,26 +572,14 @@ namespace Assign_4
 
         #endregion
 
-        //private void Map_Paint(object sender, PaintEventArgs e)
-        //{
-
-        //    Graphics g = e.Graphics;
-        //    DrawMapStructure(DekalbCommunity, g);
-        //    DrawMapStructure(SycamoreCommunity, g);
-        //}
 
         private void DrawMapStructure(Community comm, Graphics g)
         {
 
-            if (!(Drag_press.X - Drag_release.X == 0))
-                moveDistance_X = Drag_press.X - Drag_release.X;
-            if (!(Drag_press.Y - Drag_release.Y == 0))
-                moveDistance_Y = Drag_press.Y - Drag_release.Y;
-
             using (Pen myPen = new Pen(Brushes.Green, 3))
             {
-                g.DrawRec(myPen, 10 * Delta - moveDistance_X, 10 * Delta - moveDistance_Y,
-                            (Map_Hight * Delta) - moveDistance_X, (Map_Width * Delta) - moveDistance_Y);
+                //g.DrawRec(myPen, 10 * Delta - moveDistance_X, 10 * Delta - moveDistance_Y,
+                  //          (Map_Hight * Delta) - moveDistance_X, (Map_Width * Delta) - moveDistance_Y);
 
                 //g.DrawLine(myPen, (Boarder + 10) * Delta - moveDistance_X, (0 + 10) * Delta - moveDistance_Y, 
                 //                    (Boarder + 10) * Delta - moveDistance_X, (Boarder + 10) * Delta - moveDistance_Y);
@@ -845,10 +830,22 @@ namespace Assign_4
         //finding the posititons of the mouse
         private void CalculatePositions(int X, int Y)
         {
-
+            if (StreetstoSearch != null)
+            {
+                foreach (var street in StreetstoSearch)
+                {
+                    if ((X * Delta) >= street._x && X <= (street._x + 5))
+                    {
+                        if ((Y * Delta) >= street._y && Y <= (street._y + 5))
+                        {
+                            MessageBox.Show("Hello, world.");
+                        }
+                    }
+                }
+            }
         }
-
     }
+
      //drawing icons and streets
     public static class GraphicsExtensions
     {
