@@ -24,8 +24,8 @@ namespace Assign_4
         public static float Radius = 3;
         public static float Rec_Hight = 7;
         public static float Rec_Width = 7;
-        public static float Map_Hight = 500;
-        public static float Map_Width = 250;
+        public static float Map_Hight = 250;
+        public static float Map_Width = 500;
         //public static float Boarder = 250;
         public static float Delta = 1;
         public static Point Drag_press = new Point(0, 0);
@@ -33,8 +33,10 @@ namespace Assign_4
         public static float moveDistance_X = 0;
         public static float moveDistance_Y = 0;
         public static Point TopLeftCorner = new Point(0, 0);
-        public static Point ButtonRightCorner = new Point(0, 0);
+        public static Point ButtonRightCorner = new Point(500, 250);
         public static float x_offset = 0;
+        public static Point CurrentMapTopLeftCorner = new Point(0, 0);
+        public static Point CurrentMapButtonRightCorner = new Point(500, 250);
 
         //2 parrell lists
         public List<Streets> StreetstoSearch = new List<Streets>();
@@ -44,8 +46,6 @@ namespace Assign_4
             //intilaize everything
             InitializeComponent();
             InitializeCommunity();
-            Map.Refresh();
-            Mapping();
             //Map.ImageLocation = "..\\..\\icons8-home-128.png";
         }
 
@@ -119,6 +119,10 @@ namespace Assign_4
         // action after clicking the 3th query button
         private void BusinessQueryButton_Click(object sender, EventArgs e)
         {
+            if (ForSaleCombobox.SelectedItem == null)
+            {
+                return;
+            }
 
             //list of string addresses
             string[] stAddr = ForSaleCombobox.SelectedItem.ToString().Split(new[] { " # " }, StringSplitOptions.None);
@@ -159,10 +163,8 @@ namespace Assign_4
                            resType = (res is House)? true: false
                        };
 
-
             Map.Refresh();
             Graphics g = Map.CreateGraphics();
-
 
             foreach (var pro in comm.Props)
             {
@@ -183,8 +185,6 @@ namespace Assign_4
             //go through each element in the list
             foreach (var pro in list)
             {
-        
-
                 if (pro.property.City == "Sycamore")
                 {
                     x_offset = 250;
@@ -585,19 +585,14 @@ namespace Assign_4
 
         private void DrawMapStructure(Community comm, Graphics g)
         {
-            if (!(Drag_press.X - Drag_release.X == 0))
-                moveDistance_X = Drag_press.X - Drag_release.X;
-            if (!(Drag_press.Y - Drag_release.Y == 0))
-                moveDistance_Y = Drag_press.Y - Drag_release.Y;
-
+            
             using (Pen myPen = new Pen(Brushes.Green, 3))
             {
-                g.DrawRec(myPen, 10 * Delta - moveDistance_X, 10 * Delta - moveDistance_Y,
-                            (Map_Hight * Delta) - moveDistance_X, (Map_Width * Delta) - moveDistance_Y);
 
                 //g.DrawLine(myPen, (Boarder + 10) * Delta - moveDistance_X, (0 + 10) * Delta - moveDistance_Y, 
                 //                    (Boarder + 10) * Delta - moveDistance_X, (Boarder + 10) * Delta - moveDistance_Y);
             }
+            /*
             using (Pen myPen = new Pen(Color.Bisque))
             {
                 var House_Property = from pro in comm.Props
@@ -656,11 +651,13 @@ namespace Assign_4
 
                 //build the streets
                 //adding the cordinates to a list to create the grid
-                myPen.Color = Color.Black;
-                g.DrawStreets(myPen, StreetstoSearch);
+                //myPen.Color = Color.Black;
+                //g.DrawStreets(myPen, StreetstoSearch);
 
-                myPen.Dispose();
+               // myPen.Dispose();
+              
             }
+            */
         }
 
         public void Mapping()
@@ -671,32 +668,82 @@ namespace Assign_4
 
         public void CreateMap(Community comm)
         {
+            if (comm.Name == "Sycamore")
+            {
+                x_offset = 250;
+            }
+            else
+            {
+                x_offset = 0;
+            }
+
             Graphics g = Map.CreateGraphics();
 
-           
+            using (Pen myPen = new Pen(Color.Bisque))
+            {
+                var House_Property = from pro in comm.Props
+                                     where pro is House
+                                     select pro;
+                var Apart_Property = from pro in comm.Props
+                                     where pro is Apartment
+                                     select pro;
+                var Business_Property = from pro in comm.Props
+                                        where pro is Business
+                                        select pro;
+                var School_Property = from pro in comm.Props
+                                      where pro is School
+                                      select pro;
+
+                foreach (Property pro in House_Property)
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), 
+                                      (pro.Y * Delta) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y), 
+                                      Rec_Hight, Rec_Width);
+
+                myPen.Color = Color.Orange;
+                foreach (Property pro in Apart_Property)
+                    g.DrawRec(myPen, ((pro.X + x_offset) * Delta) - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), 
+                                        (pro.Y * Delta) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y), 
+                                         Rec_Hight - 2, Rec_Width + 2);
+
+                myPen.Color = Color.Aqua;
+                foreach (Property pro in School_Property)
+                    g.DrawCircle(myPen, (pro.X + x_offset) * Delta - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), 
+                                        (pro.Y * Delta) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y), 
+                                        Radius);
+
+                myPen.Color = Color.Aquamarine;
+                foreach (Property pro in Business_Property)
+                    g.DrawTri(myPen, (int)((pro.X + x_offset) * Delta - (TopLeftCorner.X - CurrentMapTopLeftCorner.X)),
+                                    (int)(pro.Y * Delta - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
+            }
         }
 
         private void ZoomInClick(object sender, EventArgs e)
         {
             if (Delta < 2)
             {
-                Delta *= (float)1.1;
-                //Map.Width = Convert.ToInt32(Map.Width * 1.1);
-                //Map.Height = Convert.ToInt32(Map.Height * 1.1);
-
+                Delta += (float)0.1;
+                CurrentMapTopLeftCorner.X = (int)(0 * Delta);
+                CurrentMapTopLeftCorner.Y = (int)(0 * Delta);
+                CurrentMapButtonRightCorner.X = (int)(500 * Delta);
+                CurrentMapButtonRightCorner.Y = (int)(250 * Delta);
             }
             Map.Refresh();
+            Mapping();
         }
 
         private void ZoomOutClick(object sender, EventArgs e)
         {
             if (Delta > 1)
             {
-                Delta /= (float)1.1;
-                //Map.Width = Convert.ToInt32(Map.Width / 1.1);
-                //Map.Height = Convert.ToInt32(Map.Height / 1.1);
+                Delta -= (float)0.1;
+                CurrentMapTopLeftCorner.X = (int)(0 * Delta);
+                CurrentMapTopLeftCorner.Y = (int)(0 * Delta);
+                CurrentMapButtonRightCorner.X = (int)(500 * Delta);
+                CurrentMapButtonRightCorner.Y = (int)(250 * Delta);
             }
             Map.Refresh();
+            Mapping();
         }
 
         private void Map_MouseDown(object sender, MouseEventArgs e)
@@ -707,14 +754,35 @@ namespace Assign_4
         private void Map_MouseUp(object sender, MouseEventArgs e)
         {
             Drag_release = e.Location;
+
+            if (TopLeftCorner.X + (Drag_press.X - Drag_release.X) >= CurrentMapTopLeftCorner.X)
+                TopLeftCorner.X += (Drag_press.X - Drag_release.X);
+            else
+                TopLeftCorner.X = CurrentMapTopLeftCorner.X;
+            if (TopLeftCorner.X + (Drag_press.X - Drag_release.X) + 500 >= CurrentMapButtonRightCorner.X)
+                TopLeftCorner.X = CurrentMapButtonRightCorner.X - 500;
+
+            if (TopLeftCorner.Y + (Drag_press.Y - Drag_release.Y) >= CurrentMapTopLeftCorner.X)
+                TopLeftCorner.Y += (Drag_press.Y - Drag_release.Y);
+            else
+                TopLeftCorner.Y = CurrentMapTopLeftCorner.Y;
+            if (TopLeftCorner.Y + (Drag_press.X - Drag_release.Y) + 250 >= CurrentMapButtonRightCorner.X)
+                TopLeftCorner.Y = CurrentMapButtonRightCorner.Y - 250;
+
+            ButtonRightCorner.X = TopLeftCorner.X + 500;
+            ButtonRightCorner.Y = TopLeftCorner.Y + 250;
+
             Map.Refresh();
+            Mapping();
         }
 
         private void reset_button_Click(object sender, EventArgs e)
         {
             Delta = 1;
-            Drag_press = new Point(0, 0);
-            Drag_release = new Point(0, 0);
+            ButtonRightCorner = new Point(500, 250);
+            TopLeftCorner = new Point(0, 0);
+            CurrentMapTopLeftCorner = new Point(0, 0);
+            CurrentMapButtonRightCorner = new Point(500, 250);
             moveDistance_X = 0;
             moveDistance_Y = 0;
 
