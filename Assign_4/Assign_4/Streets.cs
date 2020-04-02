@@ -11,14 +11,24 @@ namespace Assign_4
     {
         public int _x;
         public int _y;
+        public uint _ownerid;
         public string _streetaddr;
+        public string _city;
+        public string _state;
+        public string _zip;
+        public string _forsale;
 
         //creating the Community Object
-        public Streets(int x, int y, string StreetAddr)
+        public Streets(int x, int y, string StreetAddr, string City, string ForSale, string Zip, uint OwnerID , string State)
         {
             _x = x;
             _y = y;
             _streetaddr = StreetAddr;
+            _city = City;
+            _forsale = ForSale;
+            _zip = Zip;
+            _ownerid = OwnerID;
+            _state = State;
         }
     }
 }
