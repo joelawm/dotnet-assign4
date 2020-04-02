@@ -116,10 +116,6 @@ namespace Assign_4
 
         public class coordinate
         {
-            float x;
-            float y;
-            int type;
-
             public coordinate(float x, float y, int type)
             {
                 X = x;
@@ -270,7 +266,7 @@ namespace Assign_4
                            from res in comm.Residents
                            where (res.Id == pro.OwnerId)
                            orderby price ascending
-                           select new residentialInfo()
+                           select new 
                            {
                                AttachedGarage = attachGarage,
                                Garage = garage,
