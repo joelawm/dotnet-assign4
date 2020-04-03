@@ -532,7 +532,7 @@ namespace Assign_4
                 }
 
                 //easy way to make sure I have both list
-                g.DrawStreets(myPen, StreetstoSearch, CurrentMapTopLeftCorner, CurrentMapButtonRightCorner, TopLeftCorner, ButtonRightCorner);
+                g.DrawStreets(myPen, StreetstoSearch, CurrentMapTopLeftCorner, TopLeftCorner);
                 listbuilt = false;
                 StreetstoSearch.Clear();
                 StreetstoSearchpoints.Clear();
@@ -558,6 +558,13 @@ namespace Assign_4
 
             foreach (Property pro in House_Property)
             {
+                string[] streetparts = pro.StreetAddr.Split(' ');
+                int housenum = 0;
+                if (streetparts.Length > 1)
+                {
+                    int.TryParse(streetparts[0], out housenum);
+                }
+
                 int i = 0;
                 //X cordinate
                 if (pro.City == "Sycamore")
@@ -576,7 +583,8 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
 
@@ -584,16 +592,25 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State,housenum));
                         }
                     }
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
+                //add the points
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
             }
 
             //apartment street addresses
             foreach (Property pro in Apart_Property)
             {
+                string[] streetparts = pro.StreetAddr.Split(' ');
+                int housenum = 0;
+                if (streetparts.Length > 1)
+                {
+                    int.TryParse(streetparts[0], out housenum);
+                }
+
                 int i = 0;
                 //X cordinate
                 if (pro.City == "Sycamore")
@@ -612,7 +629,8 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
 
@@ -620,16 +638,25 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
+                //add the points
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
             }
 
             //street address for school property
             foreach (Property pro in School_Property)
             {
+                string[] streetparts = pro.StreetAddr.Split(' ');
+                int housenum = 0;
+                if (streetparts.Length > 1)
+                {
+                    int.TryParse(streetparts[0], out housenum);
+                }
+
                 int i = 0;
                 //X cordinate
                 if (pro.City == "Sycamore")
@@ -648,7 +675,8 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
 
@@ -656,16 +684,25 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
                 }
+                //add the points
+                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
             }
 
             //business street addresses
             foreach (Property pro in Business_Property)
             {
+                string[] streetparts = pro.StreetAddr.Split(' ');
+                int housenum = 0;
+                if (streetparts.Length > 1)
+                {
+                    int.TryParse(streetparts[0], out housenum);
+                }
+
                 int i = 0;
                 //X cordinate
                 if (pro.City == "Sycamore")
@@ -678,13 +715,14 @@ namespace Assign_4
                 }
                 //y cordinate
                 int i2 = Convert.ToInt32(pro.Y * Delta);
-                foreach(var cord in coord)
+                foreach (var cord in coord)
                 {
-                    if(pro.X == cord.X)
+                    if (pro.X == cord.X)
                     {
-                        if(pro.Y == cord.Y)
+                        if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
 
@@ -692,10 +730,12 @@ namespace Assign_4
                     {
                         if (pro.Y == cord.Y)
                         {
-                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                            //add the points
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                         }
                     }
-                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                    //add the points
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State, housenum));
                 }
             }
         }
@@ -857,21 +897,25 @@ namespace Assign_4
 
         public void showtooltip(Streets street, System.Drawing.Point mouse)
         {
+            //create a new tool tip to be used
             tt = new ToolTip();
             IWin32Window win = Map;
             string[] ForSale = street._forsale.Split(':');
+            string price = "";
 
+            //set the price
             if (ForSale[0] == "T")
             {
                 ForSale[0] = "Yes.";
+                price = String.Format("{0:C0}", ForSale[1]);
             }
             else
             {
                 ForSale[0] = "No.";
+                price = "N/A";
             }
-            //String.Format("{0:C0}", ForSale[1]);
-            // + "Price: " + ForSale[1]
-            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + ForSale[0] + "\r\n", win, mouse, 3000);
+            //show the TT for 3 seconds
+            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + ForSale[0] + "\r\n" + "Price: " + price, win, mouse, 3000);
             popup = true;
         }
 
@@ -908,15 +952,14 @@ namespace Assign_4
         }
 
         //drawing the streets given x,y cordinates
-        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, Point CurrentMapTopLeftCorner, Point CurrentMapButtonRightCorner, Point TopLeftCorner, Point ButtonRightCorner)
+        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, Point CurrentMapTopLeftCorner, Point TopLeftCorner)
         {
-            
             Dictionary<int, List<Streets>> streetPairs = new Dictionary<int, List<Streets>>(Streets.Count, null);
 
             //x cordinates
             foreach(var street in Streets)
             {
-
+                //serach through the pairs
                 if (streetPairs.ContainsKey(street._x))
                 {
                     List<Streets> forXOnly;
@@ -926,11 +969,13 @@ namespace Assign_4
                 }
                 else
                 {
+                    //add to list
                     streetPairs.Add(street._x, new List<Streets>() { street });
                     Debug.WriteLine(street._city + " " + street._x + "," + street._y);
                 }
             }
 
+            //for all pairs check them and draw them
             foreach (var street in streetPairs)
             {
 
@@ -938,6 +983,7 @@ namespace Assign_4
                 int maxy = -1;
                 string road ="";
                    
+                //check the stre value
                 foreach (var stre in street.Value)
                 {
                     if (streetPairs.Values.Count > 1)
@@ -948,17 +994,16 @@ namespace Assign_4
                     road = stre._streetaddr;
                 }
 
+                //if set draw the line
                 if(miny != maxy)
                 {
                     g.DrawLine(pen, new Point(street.Key - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), miny - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)), new Point(street.Key - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), maxy - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
                     System.Diagnostics.Debug.WriteLine("For X " + street.Key + "    MinY " + miny + "     MaxY " + maxy);
 
-
                     //add name here
                     int middle = ((miny + maxy) / 2) - 5;
                     road = RemoveDigits(road);
-                    System.Diagnostics.Debug.WriteLine(road.Trim());
-                    g.DrawString(road.Trim(), new Font("Tahoma", 5), Brushes.Black, street.Key, middle);
+                    g.DrawString(road.Trim(), new Font("Tahoma", 5), Brushes.Black, street.Key - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), middle - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y));
                 }
             }
 
@@ -967,7 +1012,7 @@ namespace Assign_4
             //y cordinates
             foreach (var street in Streets)
             {
-
+                //check each pair
                 if (streetPairsy.ContainsKey(street._y))
                 {
                     List<Streets> forYOnly;
@@ -987,6 +1032,7 @@ namespace Assign_4
                 int maxx = -1;
                 string road = "";
 
+                //go through all the vlaues and detemine which one to draw
                 foreach (var stre in street.Value)
                 {
                     if(streetPairsy.Values.Count > 1)
@@ -995,22 +1041,85 @@ namespace Assign_4
                         if (maxx == -1 || maxx < stre._x) maxx = stre._x;
                     }
 
+                    //set name to clean
                     road = stre._streetaddr;
                 }
                 if(minx != maxx)
                 {
-                    g.DrawLine(pen, new Point(minx, street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)), new Point(maxx - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
+                    g.DrawLine(pen, new Point(minx - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)), new Point(maxx - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
                     System.Diagnostics.Debug.WriteLine("For Y " + street.Key + "    MinX " + minx + "     MaxX " + maxx);
 
                     //add name here
                     int middle = ((minx + maxx) / 2) - 5;
                     road = RemoveDigits(road);
-                    System.Diagnostics.Debug.WriteLine(road.Trim());
-                    g.DrawString(road.Trim(), new Font("Tahoma", 5), Brushes.Black, middle, street.Key);
+                    g.DrawString(road.Trim(), new Font("Tahoma", 5), Brushes.Black, middle - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y));
+                }
+            }
+
+            //Create the curves
+            Dictionary<string, SortedList<int,Streets>> streetPairsname = new Dictionary<string, SortedList<int,Streets>>(Streets.Count, null);
+
+            //create the curves based on distance
+            foreach (var street in Streets)
+            {
+                //clean current address
+                string road = street._streetaddr;
+                road = RemoveDigits(road);
+
+                //check if it contains the key
+                if (streetPairsname.ContainsKey(road.Trim()))
+                {
+                    SortedList<int,Streets> forroadOnly;
+                    streetPairsname.TryGetValue(road.Trim(), out forroadOnly);
+                    if (!forroadOnly.ContainsKey(street._housenumber)) { 
+                        forroadOnly.Add(street._housenumber,street);
+                        //Debug.WriteLine(street._streetaddr + " " + street._x + "," + street._y);
+                    }
+                }
+                else
+                {
+                    SortedList<int, Streets> sl = new SortedList<int, Streets>();
+                    sl.Add(street._housenumber, street);
+
+                    streetPairsname.Add(road.Trim(), sl);
+                    //Debug.WriteLine(street._streetaddr + " " + street._x + "," + street._y);
+                }
+            }
+
+            foreach(var street in streetPairsname)
+            {
+                int i1 = -1;
+                int i2 = -1;
+                int i3 = -1;
+                int i4 = -1;
+
+                //go through all the values for the street key
+                foreach (var stre in street.Value)
+                {
+                    //set our next point to work on
+                    i3 = stre.Value._x;
+                    i4 = stre.Value._y;
+
+                    //find the last point you worked on or set it
+                    if (i1 == -1 || i2 == -1)
+                    {
+                        i1 = i3;
+                        i2 = i4;
+                    }
+                    else
+                    {
+                        //draw point
+                        g.DrawLine(pen, new Point(i1 - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), i2 - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)), new Point(i3 - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), i4 - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
+                        System.Diagnostics.Debug.WriteLine(street.Key + ": " + "i1 " + i1 + " i2 " + i2 + "                 i3 " + i3 + " i4 " + i4);
+                        //set point to old one
+                        i1 = i3;
+                        i2 = i4;
+                    }
                 }
             }
         }
 
+        //removes extra numbers from the addresses
         public static string RemoveDigits(string key)
         {
             return Regex.Replace(key, @"\d", "");
