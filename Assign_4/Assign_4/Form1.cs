@@ -892,9 +892,9 @@ namespace Assign_4
                 {
                     foreach (var street in StreetstoSearchpoints)
                     {
-                        if ((X * Delta) >= (street._x * Delta) && (X * Delta) <= ((street._x * Delta) + 10))
+                        if ((X) >= (street._x) - (TopLeftCorner.X - CurrentMapTopLeftCorner.X) && (X) <= ((street._x) - (TopLeftCorner.X - CurrentMapTopLeftCorner.X) + 10))
                         {
-                            if ((Y * Delta) >= (street._y * Delta) && (Y * Delta) <= ((street._y * Delta) + 10))
+                            if ((Y) >= (street._y) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y) && (Y) <= (street._y) - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y) + 10)
                             {
                                 if (streetfound != street)
                                 {
