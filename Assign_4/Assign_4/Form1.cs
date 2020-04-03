@@ -901,21 +901,24 @@ namespace Assign_4
             tt = new ToolTip();
             IWin32Window win = Map;
             string[] ForSale = street._forsale.Split(':');
+            string sale = "";
             string price = "";
 
             //set the price
             if (ForSale[0] == "T")
             {
-                ForSale[0] = "Yes.";
-                price = String.Format("{0:C0}", ForSale[1]);
+                sale = "Yes.";
+                decimal value = 0;
+                decimal.TryParse(ForSale[1], out value); 
+                price = String.Format("{0:C0}", value);
             }
             else
             {
-                ForSale[0] = "No.";
+                sale = "No.";
                 price = "N/A";
             }
             //show the TT for 3 seconds
-            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + ForSale[0] + "\r\n" + "Price: " + price, win, mouse, 3000);
+            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + sale + "\r\n" + "Price: " + price, win, mouse, 3000);
             popup = true;
         }
 
