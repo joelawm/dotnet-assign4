@@ -740,12 +740,14 @@ namespace Assign_4
             }
         }
 
+        // recieve the information from the queries and drawing the map 
         public void Mapping(Graphics g)
         {
             using (Pen myPen = new Pen(Color.Bisque))
             {
                 foreach (var property_coord in coord)
                 {
+                    // 1 for House; 2 for Apartment; 3 for School; 4 for Business;
                     switch (property_coord.Type) 
                     {
 
@@ -784,8 +786,10 @@ namespace Assign_4
             }
         }
 
+        // reaction for zoom in buttom  
         private void ZoomInClick(object sender, EventArgs e)
         {
+            // limit the max number that the map can increase (2)
             if (Delta < 2)
             {
                 Delta += (float)0.1;
@@ -797,8 +801,10 @@ namespace Assign_4
             Map.Refresh();
         }
 
+        //reaction for zoom out buttom
         private void ZoomOutClick(object sender, EventArgs e)
         {
+            // limit the min number that the map can decrese (1)
             if (Delta > 1)
             {
                 Delta -= (float)0.1;
@@ -810,26 +816,32 @@ namespace Assign_4
             Map.Refresh();
         }
 
+        //reaction when mouse press on the picture box
         private void Map_MouseDown(object sender, MouseEventArgs e)
         {
             Drag_press = e.Location;
         }
 
+        //reaction when mouse release on the picture box
         private void Map_MouseUp(object sender, MouseEventArgs e)
         {
             Drag_release = e.Location;
 
+            // top left corner of the rectangle scale cannot be less than the map scale (for X coordinate)
             if (TopLeftCorner.X + (Drag_press.X - Drag_release.X) >= CurrentMapTopLeftCorner.X)
                 TopLeftCorner.X += (Drag_press.X - Drag_release.X);
             else
                 TopLeftCorner.X = CurrentMapTopLeftCorner.X;
+            // buttom right corner of the rectangle scale cannot be less than the map scale (for X coordinate)
             if (TopLeftCorner.X + (Drag_press.X - Drag_release.X) + 500 >= CurrentMapButtonRightCorner.X)
                 TopLeftCorner.X = CurrentMapButtonRightCorner.X - 500;
 
+            // top left corner of the rectangle scale cannot be less than the map scale (for Y coordinate)
             if (TopLeftCorner.Y + (Drag_press.Y - Drag_release.Y) >= CurrentMapTopLeftCorner.X)
                 TopLeftCorner.Y += (Drag_press.Y - Drag_release.Y);
             else
                 TopLeftCorner.Y = CurrentMapTopLeftCorner.Y;
+            // buttom right corner of the rectangle scale cannot be less than the map scale (for Y coordinate)
             if (TopLeftCorner.Y + (Drag_press.X - Drag_release.Y) + 250 >= CurrentMapButtonRightCorner.Y)
                 TopLeftCorner.Y = CurrentMapButtonRightCorner.Y - 250;
 
@@ -839,6 +851,7 @@ namespace Assign_4
             Map.Refresh();
         }
 
+        // this reset the map to its initial setting
         private void reset_button_Click(object sender, EventArgs e)
         {
             Delta = 1;
