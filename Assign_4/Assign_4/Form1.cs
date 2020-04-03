@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Assign_4
 {
@@ -38,7 +39,12 @@ namespace Assign_4
         public static Point CurrentMapTopLeftCorner = new Point(0, 0);
         public static Point CurrentMapButtonRightCorner = new Point(500, 250);
         public List<Streets> StreetstoSearch = new List<Streets>();
+        public List<Streets> StreetstoSearchpoints = new List<Streets>();
         public static List<coordinate> coord = new List<coordinate>();
+        public bool popup = true;
+        public bool listbuilt = false;
+        public ToolTip tt = new ToolTip();
+        public Streets streetfound;
 
         public Form1()
         {
@@ -518,15 +524,18 @@ namespace Assign_4
                 //adding the cordinates to a list to create the grid
                 myPen.Color = Color.Black;
 
-                buildlist(DekalbCommunity);
-                buildlist(SycamoreCommunity);
+                if (listbuilt == false)
+                {
+                    buildlist(DekalbCommunity);
+                    buildlist(SycamoreCommunity);
+                    listbuilt = true;
+                }
 
                 //easy way to make sure I have both list
-                if (StreetstoSearch.Count > 30)
-                {
-                    g.DrawStreets(myPen, StreetstoSearch);
-                    StreetstoSearch.Clear();
-                }
+                g.DrawStreets(myPen, StreetstoSearch, CurrentMapTopLeftCorner, CurrentMapButtonRightCorner, TopLeftCorner, ButtonRightCorner);
+                listbuilt = false;
+                StreetstoSearch.Clear();
+                StreetstoSearchpoints.Clear();
 
                 myPen.Dispose();
             }
@@ -561,7 +570,25 @@ namespace Assign_4
                 }
                 //y cordinate
                 int i2 = Convert.ToInt32(pro.Y * Delta);
-                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                foreach (var cord in coord)
+                {
+                    if (pro.X == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
+
+                    if (pro.X + 250 == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                }
             }
 
             //apartment street addresses
@@ -579,8 +606,25 @@ namespace Assign_4
                 }
                 //y cordinate
                 int i2 = Convert.ToInt32(pro.Y * Delta);
+                foreach (var cord in coord)
+                {
+                    if (pro.X == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
 
-                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                    if (pro.X + 250 == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                }
             }
 
             //street address for school property
@@ -598,8 +642,25 @@ namespace Assign_4
                 }
                 //y cordinate
                 int i2 = Convert.ToInt32(pro.Y * Delta);
+                foreach (var cord in coord)
+                {
+                    if (pro.X == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
 
-                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                    if (pro.X + 250 == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                }
             }
 
             //business street addresses
@@ -617,7 +678,25 @@ namespace Assign_4
                 }
                 //y cordinate
                 int i2 = Convert.ToInt32(pro.Y * Delta);
-                StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                foreach(var cord in coord)
+                {
+                    if(pro.X == cord.X)
+                    {
+                        if(pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
+
+                    if (pro.X + 250 == cord.X)
+                    {
+                        if (pro.Y == cord.Y)
+                        {
+                            StreetstoSearchpoints.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                        }
+                    }
+                    StreetstoSearch.Add(new Streets(i, i2, pro.StreetAddr, pro.City, pro.ForSale, pro.Zip, pro.OwnerId, pro.State));
+                }
             }
         }
 
@@ -747,40 +826,53 @@ namespace Assign_4
         private void CalculatePositions(int X, int Y, System.Drawing.Point mouse)
         {
             //build the communitieis
-            if (StreetstoSearch.Count < 30)
+            if (listbuilt == false)
             {
                 buildlist(DekalbCommunity);
                 buildlist(SycamoreCommunity);
+                listbuilt = true;
             }
 
-            if (StreetstoSearch.Count > 30)
+            if (listbuilt == true)
             {
-                foreach (var street in StreetstoSearch)
+                if(popup == true)
                 {
-                    if ((X * Delta) >= (street._x * Delta) && (X * Delta) <= ((street._x * Delta) + 5))
+                    foreach (var street in StreetstoSearchpoints)
                     {
-                        if ((Y * Delta) >= (street._y * Delta) && (Y * Delta) <= ((street._y * Delta) + 5))
+                        if ((X * Delta) >= (street._x * Delta) && (X * Delta) <= ((street._x * Delta) + 10))
                         {
-                            ToolTip tt = new ToolTip();
-                            IWin32Window win = this;
-                            string[] ForSale = street._forsale.Split(':');
-
-                            if (ForSale[0] == "T")
+                            if ((Y * Delta) >= (street._y * Delta) && (Y * Delta) <= ((street._y * Delta) + 10))
                             {
-                                ForSale[0] = "Yes.";
+                                if (streetfound != street)
+                                {
+                                    streetfound = street;
+                                    showtooltip(street, mouse);
+                                }
                             }
-                            else
-                            {
-                                ForSale[0] = "No.";
-                            }
-                            //String.Format("{0:C0}", ForSale[1]);
-                            // + "Price: " + ForSale[1]
-                            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + ForSale[0] + "\r\n", win, mouse, 500);
-                            break;
                         }
                     }
                 }
             }
+        }
+
+        public void showtooltip(Streets street, System.Drawing.Point mouse)
+        {
+            tt = new ToolTip();
+            IWin32Window win = Map;
+            string[] ForSale = street._forsale.Split(':');
+
+            if (ForSale[0] == "T")
+            {
+                ForSale[0] = "Yes.";
+            }
+            else
+            {
+                ForSale[0] = "No.";
+            }
+            //String.Format("{0:C0}", ForSale[1]);
+            // + "Price: " + ForSale[1]
+            tt.Show("Address: " + street._streetaddr + "\r\n" + "City: " + street._city + "\r\n" + "Zipcode: " + street._zip + "\r\n" + "For sale: " + ForSale[0] + "\r\n", win, mouse, 3000);
+            popup = true;
         }
 
         private void Map_Paint(object sender, PaintEventArgs e)
@@ -816,7 +908,7 @@ namespace Assign_4
         }
 
         //drawing the streets given x,y cordinates
-        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets)
+        public static void DrawStreets(this Graphics g, Pen pen, List<Streets> Streets, Point CurrentMapTopLeftCorner, Point CurrentMapButtonRightCorner, Point TopLeftCorner, Point ButtonRightCorner)
         {
             
             Dictionary<int, List<Streets>> streetPairs = new Dictionary<int, List<Streets>>(Streets.Count, null);
@@ -858,13 +950,15 @@ namespace Assign_4
 
                 if(miny != maxy)
                 {
-                    g.DrawLine(pen, new Point(street.Key, miny), new Point(street.Key, maxy));
+                    g.DrawLine(pen, new Point(street.Key - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), miny - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)), new Point(street.Key - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), maxy - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
                     System.Diagnostics.Debug.WriteLine("For X " + street.Key + "    MinY " + miny + "     MaxY " + maxy);
 
 
                     //add name here
-                    int middle = miny + maxy / 2;
-                    g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, street.Key, middle);
+                    int middle = ((miny + maxy) / 2) - 5;
+                    road = RemoveDigits(road);
+                    System.Diagnostics.Debug.WriteLine(road.Trim());
+                    g.DrawString(road.Trim(), new Font("Tahoma", 5), Brushes.Black, street.Key, middle);
                 }
             }
 
@@ -905,14 +999,21 @@ namespace Assign_4
                 }
                 if(minx != maxx)
                 {
-                    g.DrawLine(pen, new Point(minx, street.Key), new Point(maxx, street.Key));
+                    g.DrawLine(pen, new Point(minx, street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)), new Point(maxx - (TopLeftCorner.X - CurrentMapTopLeftCorner.X), street.Key - (TopLeftCorner.Y - CurrentMapTopLeftCorner.Y)));
                     System.Diagnostics.Debug.WriteLine("For Y " + street.Key + "    MinX " + minx + "     MaxX " + maxx);
 
                     //add name here
-                    int middle = minx + maxx / 2;
-                    g.DrawString(road, new Font("Tahoma", 5), Brushes.Black, middle, street.Key);
+                    int middle = ((minx + maxx) / 2) - 5;
+                    road = RemoveDigits(road);
+                    System.Diagnostics.Debug.WriteLine(road.Trim());
+                    g.DrawString(road.Trim(), new Font("Tahoma", 5), Brushes.Black, middle, street.Key);
                 }
             }
+        }
+
+        public static string RemoveDigits(string key)
+        {
+            return Regex.Replace(key, @"\d", "");
         }
     }
 }
